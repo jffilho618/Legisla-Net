@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordem dos Oradores - Câmara Digital</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <style>
+        :root {
+            --background-dark: #0d1117;
+            --sidebar-bg: #161b22;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #2ea043;
+            --accent-red: #da3633;
+            --accent-orange: #f08833;
+            --hover-bg: #21262d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark );
+            color: var(--primary-text);
+            overflow-x: hidden;
+        }
+
+        .app-layout { display: flex; min-height: 100vh; }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .sidebar-header .logo-icon { font-size: 1.5rem; color: var(--accent-blue); }
+        .sidebar-header h1 { font-size: 1.25rem; font-weight: 600; }
+        .nav-menu { list-style: none; flex-grow: 1; }
+        .nav-group-title { font-size: 0.75rem; font-weight: 600; color: var(--secondary-text); text-transform: uppercase; margin-top: 24px; margin-bottom: 8px; padding: 0 12px; }
+        .nav-item a { display: flex; align-items: center; padding: 10px 12px; border-radius: 6px; text-decoration: none; color: var(--secondary-text); font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+        .nav-item a:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .nav-item.active a { background-color: var(--accent-blue); color: #ffffff; }
+
+        /* --- Conteúdo Principal --- */
+        .main-content { flex-grow: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-shrink: 0; }
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title i { font-size: 1.25rem; }
+        .header-title h2 { font-size: 1.5rem; font-weight: 600; }
+
+        /* Estilos do Perfil e Dropdown */
+        .user-profile { position: relative; }
+        .profile-button { display: flex; align-items: center; gap: 12px; background-color: var(--hover-bg); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
+        .profile-button:hover { background-color: #2e343b; }
+        .profile-avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .profile-info { display: flex; flex-direction: column; align-items: flex-start; }
+        .profile-info .name { font-weight: 600; font-size: 0.875rem; color: var(--primary-text); }
+        .profile-info .email { font-size: 0.75rem; color: var(--primary-text); opacity: 0.7; }
+        .profile-button .fa-chevron-down { transition: transform 0.2s; color: var(--secondary-text); }
+        .profile-button.active .fa-chevron-down { transform: rotate(180deg); }
+        .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 10; overflow: hidden; }
+        .profile-dropdown.active { display: block; }
+        .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 15px; color: var(--secondary-text); text-decoration: none; font-size: 0.875rem; }
+        .dropdown-item:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .dropdown-item i { width: 16px; }
+        .dropdown-divider { height: 1px; background-color: var(--border-color); margin: 4px 0; }
+
+        /* --- Seção Ordem dos Oradores --- */
+        .oradores-section { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+        .oradores-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .oradores-header h2 { font-size: 1.25rem; }
+        .btn { border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: transform 0.1s ease, filter 0.2s ease; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn:active { transform: scale(0.98); filter: brightness(0.95); }
+        .btn-primary { background-color: var(--accent-green); color: white; }
+        .btn-secondary { background-color: var(--border-color); color: var(--primary-text); }
+
+        /* Lista de Oradores */
+        .oradores-list { flex-grow: 1; }
+        .list-header, .list-item { display: flex; align-items: center; padding: 12px 16px; }
+        .list-header { color: var(--secondary-text); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        .list-item { font-size: 0.875rem; border-bottom: 1px solid var(--border-color); transition: background-color 0.2s; }
+        .list-item:hover { background-color: var(--hover-bg); }
+        .col-vereador { flex: 3; }
+        .col-data { flex: 2; }
+        .col-tempo { flex: 2; }
+        .col-acoes { flex: 1; text-align: right; }
+        .action-icon { background: none; border: none; color: var(--secondary-text); cursor: pointer; font-size: 1rem; margin-left: 16px; transition: color 0.2s; }
+        .action-icon:hover { color: var(--primary-text); }
+        .action-icon.edit:hover { color: var(--accent-orange); }
+        .action-icon.remove:hover { color: var(--accent-red); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 32px;
+            width: 100%;
+            max-width: 500px;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-header { margin-bottom: 24px; }
+        .modal-header h2 { font-size: 1.5rem; font-weight: 600; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--secondary-text); margin-bottom: 8px; }
+        .form-input, .form-select {
+            width: 100%;
+            background-color: var(--background-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: var(--primary-text);
+            font-size: 1rem;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        /* RESPONSIVIDADE */
+        .cards-container { display: none; }
+        @media (max-width: 768px) {
+            .app-layout { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .main-content { padding: 16px; }
+            .oradores-list { display: none; }
+            .cards-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex-grow: 1; }
+            .orador-card { background-color: var(--hover-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+            .orador-card-header { display: flex; justify-content: space-between; align-items: center; }
+            .orador-card-header h3 { font-size: 1rem; font-weight: 600; }
+            .orador-card-body { font-size: 0.875rem; color: var(--secondary-text); display: flex; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-building-columns logo-icon"></i>
+                <h1>Câmara Digital</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item"><a href="#">Painel de votação</a></li>
+                <li class="nav-item"><a href="#">Cadastro de Pautas</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#">Vereadores</a></li>
+                <li class="nav-item active"><a href="#">Ordem do dia</a></li>
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-gavel"></i>
+                    <h2>Página</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <section class="oradores-section">
+                <div class="oradores-header">
+                    <h2>Ordem dos Oradores</h2>
+                    <button class="btn btn-primary" id="novoOradorBtn">+ Novo Orador</button>
+                </div>
+
+                <div class="oradores-list">
+                    <div class="list-header">
+                        <div class="col-vereador">Vereador</div>
+                        <div class="col-data">Data</div>
+                        <div class="col-tempo">Tempo de Fala</div>
+                        <div class="col-acoes">Ações</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="col-vereador">TOINHO DE QUINCA</div>
+                        <div class="col-data">30 de julho de 2025</div>
+                        <div class="col-tempo">10 minutos</div>
+                        <div class="col-acoes">
+                            <button class="action-icon edit" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                            <button class="action-icon remove" title="Remover"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cards-container">
+                    <div class="orador-card">
+                        <div class="orador-card-header">
+                            <h3>TOINHO DE QUINCA</h3>
+                            <div class="col-acoes">
+                                <button class="action-icon edit" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="action-icon remove" title="Remover"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        <div class="orador-card-body">
+                            <span>30 de julho de 2025</span>
+                            <span>10 minutos</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL PARA NOVO ORADOR -->
+    <div class="modal-overlay" id="oradorModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Novo Orador</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="vereador-select">Vereador</label>
+                    <select id="vereador-select" class="form-select">
+                        <option value="">Selecione um vereador</option>
+                        <option value="1">Toinho de Quinca</option>
+                        <option value="2">Marcilene Barros</option>
+                        <option value="3">João Lourende</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="data-input">Data</label>
+                    <input type="date" id="data-input" class="form-input" value="2025-08-06">
+                </div>
+                <div class="form-group">
+                    <label for="tempo-input">Tempo de Fala (minutos)</label>
+                    <input type="number" id="tempo-input" class="form-input" min="1" placeholder="Ex: 10">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelarBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Criar Orador</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Script para o dropdown do perfil
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            profileDropdown.classList.toggle('active');
+            profileBtn.classList.toggle('active');
+        });
+        window.addEventListener('click', () => {
+            if (profileDropdown.classList.contains('active')) {
+                profileDropdown.classList.remove('active');
+                profileBtn.classList.remove('active');
+            }
+        });
+
+        // Script para o modal de Novo Orador
+        const novoOradorBtn = document.getElementById('novoOradorBtn');
+        const oradorModal = document.getElementById('oradorModal');
+        const cancelarBtn = document.getElementById('cancelarBtn');
+
+        novoOradorBtn.addEventListener('click', () => {
+            oradorModal.classList.add('active');
+        });
+
+        const closeModal = () => {
+            oradorModal.classList.remove('active');
+        };
+
+        cancelarBtn.addEventListener('click', closeModal);
+        oradorModal.addEventListener('click', (event) => {
+            // Fecha o modal apenas se o clique for no overlay (fundo)
+            if (event.target === oradorModal) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Vereador - Câmara Digital</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        :root {
+            --background-dark: #0d1117;
+            --sidebar-bg: #161b22;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #2ea043;
+            --hover-bg: #21262d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--primary-text);
+            overflow-x: hidden;
+        }
+
+        .app-layout { display: flex; min-height: 100vh; }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .sidebar-header .logo-icon { font-size: 1.5rem; color: var(--accent-blue); }
+        .sidebar-header h1 { font-size: 1.25rem; font-weight: 600; }
+        .nav-menu { list-style: none; flex-grow: 1; }
+        .nav-group-title { font-size: 0.75rem; font-weight: 600; color: var(--secondary-text); text-transform: uppercase; margin-top: 24px; margin-bottom: 8px; padding: 0 12px; }
+        .nav-item a { display: flex; align-items: center; padding: 10px 12px; border-radius: 6px; text-decoration: none; color: var(--secondary-text); font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+        .nav-item a:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .nav-item.active a { background-color: var(--accent-blue); color: #ffffff; }
+
+        /* --- Conteúdo Principal --- */
+        .main-content { flex-grow: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-shrink: 0; }
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title i { font-size: 1.25rem; }
+        .header-title h2 { font-size: 1.5rem; font-weight: 600; }
+
+        /* MODIFICAÇÃO: Estilos do Perfil e Dropdown */
+        .user-profile { position: relative; }
+        .profile-button { display: flex; align-items: center; gap: 12px; background-color: var(--hover-bg); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
+        .profile-button:hover { background-color: #2e343b; }
+        .profile-avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .profile-info { display: flex; flex-direction: column; align-items: flex-start; }
+        .profile-info .name { font-weight: 600; font-size: 0.875rem; color: var(--primary-text); }
+        .profile-info .email { font-size: 0.75rem; color: var(--primary-text); opacity: 0.7; }
+        .profile-button .fa-chevron-down { transition: transform 0.2s; color: var(--secondary-text); }
+        .profile-button.active .fa-chevron-down { transform: rotate(180deg); }
+        .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 10; overflow: hidden; }
+        .profile-dropdown.active { display: block; }
+        .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 15px; color: var(--secondary-text); text-decoration: none; font-size: 0.875rem; }
+        .dropdown-item:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .dropdown-item i { width: 16px; }
+        .dropdown-divider { height: 1px; background-color: var(--border-color); margin: 4px 0; }
+        
+
+        /* --- Seção do Formulário --- */
+        .form-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 32px;
+            flex-grow: 1;
+            max-width: 800px;
+        }
+        .form-section h2 { font-size: 1.5rem; margin-bottom: 32px; }
+
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--secondary-text); margin-bottom: 8px; }
+        
+        .form-input, .form-select {
+            width: 100%;
+            background-color: var(--background-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: var(--primary-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238b949e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        /* Toggle Switch para "Presidente" */
+        .toggle-group { display: flex; align-items: center; gap: 12px; }
+        .toggle-switch { position: relative; display: inline-block; width: 51px; height: 31px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-color); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 23px; width: 23px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-green); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .toggle-group span { font-weight: 500; }
+
+        /* Input de Arquivo e Foto */
+        .current-photo {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+        .file-input-wrapper { position: relative; display: flex; align-items: center; width: 100%; background-color: var(--background-dark); border: 1px solid var(--border-color); border-radius: 6px; }
+        .file-input-button {
+            background-color: var(--hover-bg);
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            white-space: nowrap;
+            color: var(--primary-text);
+            border-right: 1px solid var(--border-color);
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        .file-input-text { margin-left: 12px; color: var(--secondary-text); font-size: 0.875rem; }
+        #file-input { opacity: 0; position: absolute; left: 0; top: 0; width: 100%; height: 100%; cursor: pointer; }
+
+        /* Botão de Ação */
+        .form-actions { margin-top: 32px; }
+        .btn {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s ease, filter 0.2s ease;
+        }
+        .btn-primary { background-color: var(--accent-green); color: #ffffff; }
+        .btn:hover { filter: brightness(1.1); }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-building-columns logo-icon"></i>
+                <h1>Câmara Digital</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item"><a href="#">Painel de votação</a></li>
+                <li class="nav-item"><a href="#">Cadastro de Pautas</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item active"><a href="#">Vereadores</a></li>
+                <li class="nav-item"><a href="#">Ordem do dia</a></li>
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-user-pen"></i>
+                    <h2>Página</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <section class="form-section">
+                <form onsubmit="return false;">
+                    <h2>Editar vereador</h2>
+                    
+                    <div class="form-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                        <span>Presidente</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" class="form-input" value="MARCILENE BARROS">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partido">Partido</label>
+                        <select id="partido" class="form-select">
+                            <option selected>PP - Partido Progressista</option>
+                            <option>MDB - Movimento Democrático Brasileiro</option>
+                            <option>PT - Partido dos Trabalhadores</option>
+                            <option>Republicanos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file-input">Foto</label>
+                        <img src="https://i.imgur.com/AsaIqWc.jpeg" alt="Foto atual de Marcilene Barros" class="current-photo">
+                        <div class="file-input-wrapper">
+                            <label for="file-input" class="file-input-button">Escolher arquivo</label>
+                            <span id="file-name" class="file-input-text">Nenhum arquivo escolhido</span>
+                            <input type="file" id="file-input">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Atualizar vereador</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Script para o dropdown do perfil
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            profileDropdown.classList.toggle('active');
+            profileBtn.classList.toggle('active');
+        });
+        window.addEventListener('click', () => {
+            if (profileDropdown.classList.contains('active')) {
+                profileDropdown.classList.remove('active');
+                profileBtn.classList.remove('active');
+            }
+        });
+
+        // Script para o input de arquivo
+        document.getElementById('file-input').addEventListener('change', function() {
+            const fileNameEl = document.getElementById('file-name');
+            if (this.files[0]) {
+                fileNameEl.textContent = this.files[0].name;
+            } else {
+                fileNameEl.textContent = 'Nenhum arquivo escolhido';
+            }
+        });
+    </script>
+</body>
+</html>

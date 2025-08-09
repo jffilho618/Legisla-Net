@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Votação - Câmara Digital</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --background-dark: #0d1117;
+            --sidebar-bg: #161b22;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #2ea043;
+            --accent-red: #da3633;
+            --accent-orange: #f08833;
+            --hover-bg: #21262d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark );
+            color: var(--primary-text);
+            overflow-x: hidden;
+        }
+
+        .app-layout { display: flex; min-height: 100vh; }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .sidebar-header .logo-icon { font-size: 1.5rem; color: var(--accent-blue); }
+        .sidebar-header h1 { font-size: 1.25rem; font-weight: 600; }
+        .nav-menu { list-style: none; flex-grow: 1; }
+        .nav-group-title { font-size: 0.75rem; font-weight: 600; color: var(--secondary-text); text-transform: uppercase; margin-top: 24px; margin-bottom: 8px; padding: 0 12px; }
+        .nav-item a { display: flex; align-items: center; padding: 10px 12px; border-radius: 6px; text-decoration: none; color: var(--secondary-text); font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+        .nav-item a:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .nav-item.active a { background-color: var(--accent-blue); color: #ffffff; }
+
+        /* --- Conteúdo Principal --- */
+        .main-content { flex-grow: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-shrink: 0; flex-wrap: wrap; gap: 16px; }
+        .header-title { display: flex; align-items: center; gap: 12px; }
+        .header-title i { font-size: 1.25rem; }
+        .header-title h2 { font-size: 1.5rem; font-weight: 600; }
+
+        /* Estilos do Perfil e Dropdown */
+        .user-profile { position: relative; }
+        .profile-button { display: flex; align-items: center; gap: 12px; background-color: var(--hover-bg); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; }
+        .profile-button:hover { background-color: #2e343b; }
+        .profile-avatar { width: 32px; height: 32px; border-radius: 50%; background-color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+        .profile-info { display: flex; flex-direction: column; align-items: flex-start; }
+        .profile-info .name { font-weight: 600; font-size: 0.875rem; color: var(--primary-text); }
+        .profile-info .email { font-size: 0.75rem; color: var(--primary-text); opacity: 0.7; }
+        .profile-button .fa-chevron-down { transition: transform 0.2s; color: var(--secondary-text); }
+        .profile-button.active .fa-chevron-down { transform: rotate(180deg); }
+        .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; width: 200px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 10; overflow: hidden; }
+        .profile-dropdown.active { display: block; }
+        .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 15px; color: var(--secondary-text); text-decoration: none; font-size: 0.875rem; }
+        .dropdown-item:hover { background-color: var(--hover-bg); color: var(--primary-text); }
+        .dropdown-item i { width: 16px; }
+        .dropdown-divider { height: 1px; background-color: var(--border-color); margin: 4px 0; }
+
+        /* --- Layout do Painel de Votação --- */
+        .votacao-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; flex-grow: 1; }
+        .info-column, .votantes-column { display: flex; flex-direction: column; gap: 24px; }
+        .info-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; }
+        .info-card h3 { font-size: 0.875rem; font-weight: 600; color: var(--secondary-text); margin-bottom: 8px; }
+        .info-card p, .info-card a { font-size: 1rem; color: var(--primary-text); }
+        .info-card a { color: var(--accent-blue); text-decoration: none; font-weight: 500; }
+        .info-card a:hover { text-decoration: underline; }
+        .qr-code-container { text-align: center; }
+        .qr-code-container img { width: 100%; max-width: 200px; height: auto; border-radius: 8px; border: 4px solid var(--border-color); margin-bottom: 12px; }
+        .chart-container { position: relative; width: 100%; max-width: 200px; margin: 0 auto; }
+
+        /* Grid de Votantes */
+        .votantes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+        .votante-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .votante-header { display: flex; justify-content: space-between; align-items: center; }
+        .votante-info { display: flex; align-items: center; gap: 12px; }
+        .votante-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .votante-name { font-weight: 600; }
+        .votante-timestamp { font-size: 0.75rem; color: var(--secondary-text); }
+        .tag { font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 99px; }
+        .tag-presidente { background-color: rgba(240, 136, 51, 0.2); color: var(--accent-orange); }
+
+        .voto-display {
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--primary-text);
+            opacity: 0.9;
+        }
+        .voto-sim { background-color: var(--accent-green); }
+        .voto-nao { background-color: var(--accent-red); }
+        .voto-abstencao { background-color: var(--accent-orange); }
+
+        /* MODIFICAÇÃO: Estilos da tag Situação (importados do dashboard) */
+        .badge-aprovado {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(46, 160, 67, 0.2);
+            color: #3fb950;
+            border: 1px solid rgba(46, 160, 67, 0.4);
+        }
+        .badge-reprovado {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(218, 54, 51, 0.2);
+            color: #f85149;
+            border: 1px solid rgba(218, 54, 51, 0.4);
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 1024px) { .votacao-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+            .app-layout { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .main-content { padding: 16px; }
+            .votantes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-building-columns logo-icon"></i>
+                <h1>Câmara Digital</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item active"><a href="#">Painel de votação</a></li>
+                <li class="nav-item"><a href="#">Cadastro de Pautas</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#">Vereadores</a></li>
+                <li class="nav-item"><a href="#">Ordem do dia</a></li>
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-table-columns"></i>
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="votacao-layout">
+                <div class="info-column">
+                    <div class="info-card">
+                        <h3>Denúncia - 2ª votação</h3>
+                        <p style="color: var(--secondary-text); font-size: 0.875rem; margin-bottom: 16px;">Atualizado em 06/08/2025 às 18:14:58</p>
+                        <span class="badge-aprovado">Aprovado</span>
+                    </div>
+                    <div class="info-card">
+                        <h3>Descrição da pauta</h3>
+                        <p>Denúncia com pedido de instauração de Comissão Parlamentar de Inquérito</p>
+                    </div>
+                    <div class="info-card qr-code-container">
+                        <h3>QR Code da Pauta</h3>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://camara-digital.vercel.app/pauta/123" alt="QR Code da Pauta">
+                        <p style="font-size: 0.875rem; color: var(--secondary-text );">Escaneie para acessar o documento da pauta</p>
+                        <a href="#">Abrir documento</a>
+                    </div>
+                    <div class="info-card">
+                        <h3>Votos</h3>
+                        <div class="chart-container">
+                            <canvas id="votacaoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="votantes-column">
+                    <div class="votantes-grid">
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=ramon" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">RAMON BELO</span>
+                                </div>
+                                <span class="tag tag-presidente">Presidente</span>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:20:46</div>
+                            <div class="voto-display voto-sim"><i class="fa-regular fa-circle-check"></i> Sim</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=samim" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">SAMIM</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:20:43</div>
+                            <div class="voto-display voto-nao"><i class="fa-regular fa-circle-xmark"></i> Não</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=joao" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">JOÃO LOURENDE</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:20:43</div>
+                            <div class="voto-display voto-sim"><i class="fa-regular fa-circle-check"></i> Sim</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=assis" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">DE ASSIS DANTAS</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:20:52</div>
+                            <div class="voto-display voto-sim"><i class="fa-regular fa-circle-check"></i> Sim</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=toinho" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">TOINHO DE QUINCA</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:21:08</div>
+                            <div class="voto-display voto-sim"><i class="fa-regular fa-circle-check"></i> Sim</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=valdivia" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">VALDIVIA MOURA</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:21:10</div>
+                            <div class="voto-display voto-abstencao"><i class="fa-regular fa-circle"></i> Abstenção</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Lógica do Dropdown de Perfil
+        const profileBtn = document.getElementById('profileBtn' );
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            profileDropdown.classList.toggle('active');
+            profileBtn.classList.toggle('active');
+        });
+        window.addEventListener('click', () => {
+            if (profileDropdown.classList.contains('active')) {
+                profileDropdown.classList.remove('active');
+                profileBtn.classList.remove('active');
+            }
+        });
+
+        // Lógica do Gráfico de Pizza
+        Chart.defaults.color = 'var(--primary-text)';
+        const ctx = document.getElementById('votacaoChart').getContext('2d');
+        const votacaoChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sim', 'Não', 'Abstenção'],
+                datasets: [{
+                    label: 'Votos',
+                    data: [4, 1, 1],
+                    backgroundColor: [
+                        'rgba(46, 160, 67, 0.8)',
+                        'rgba(218, 54, 51, 0.8)',
+                        'rgba(240, 136, 51, 0.8)'
+                    ],
+                    borderColor: [
+                        '#2ea043',
+                        '#da3633',
+                        '#f08833'
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'var(--primary-text)',
+                            boxWidth: 15,
+                            padding: 20
+                        },
+                        onClick: null 
+                    },
+                    tooltip: {
+                        backgroundColor: 'var(--card-bg)',
+                        titleColor: 'var(--primary-text)',
+                        bodyColor: 'var(--secondary-text)',
+                        borderColor: 'var(--border-color)',
+                        borderWidth: 1
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
