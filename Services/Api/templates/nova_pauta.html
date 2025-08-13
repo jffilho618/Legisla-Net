@@ -18,7 +18,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--background-dark ); color: var(--primary-text); overflow-x: hidden; }
         .app-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: 250px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); padding: 24px; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
         .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
         .sidebar-header .logo-icon { font-size: 1.5rem; color: var(--accent-blue); }
         .sidebar-header h1 { font-size: 1.25rem; font-weight: 600; }
@@ -27,7 +38,22 @@
         .nav-item a { display: flex; align-items: center; padding: 10px 12px; border-radius: 6px; text-decoration: none; color: var(--secondary-text); font-weight: 500; transition: background-color 0.2s, color 0.2s; }
         .nav-item a:hover { background-color: var(--hover-bg); color: var(--primary-text); }
         .nav-item.active a { background-color: var(--accent-blue); color: #ffffff; }
-        .main-content { flex-grow: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .main-content.transitioning {
+            opacity: 0;
+            transform: translateX(20px);
+        }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-shrink: 0; }
         .header-title { display: flex; align-items: center; gap: 12px; }
         .header-title i { font-size: 1.25rem; }
@@ -49,7 +75,7 @@
         .form-input, .form-textarea, .form-select { width: 100%; background-color: var(--background-dark); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px 12px; color: var(--primary-text); font-family: 'Inter', sans-serif; font-size: 1rem; }
         .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2); }
         .form-textarea { resize: vertical; min-height: 100px; }
-        .form-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238b949e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e" ); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+        .form-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%238b949e\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'%3e%3c/svg%3e" ); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
         .file-input-wrapper { position: relative; display: flex; align-items: center; }
         .file-input-button { background-color: var(--hover-bg); border: 1px solid var(--border-color); padding: 10px 16px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
         .file-input-text { margin-left: 12px; color: var(--secondary-text); font-size: 0.875rem; }
@@ -70,16 +96,17 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
-                <li class="nav-item"><a href="#">Painel de votação</a></li>
-                <li class="nav-item active"><a href="#">Cadastro de Pautas</a></li>
+                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="#" data-page="painel">Painel de votação</a></li>
+                <li class="nav-item active"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
                 <li class="nav-group-title">Gerenciamento</li>
-                <li class="nav-item"><a href="#">Vereadores</a></li>
-                <li class="nav-item"><a href="#">Ordem do dia</a></li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
                 <li class="nav-group-title">Relatórios</li>
-                <li class="nav-item"><a href="#">Relatório de votações</a></li>
+                <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
             </ul>
         </aside>
-        <main class="main-content">
+        <main class="main-content" id="mainContent">
             <header class="content-header">
                 <div class="header-title">
                     <i class="fa-solid fa-file-pen"></i>
@@ -143,13 +170,64 @@
         </main>
     </div>
     <script>
-        const profileBtn = document.getElementById('profileBtn');
-        const profileDropdown = document.getElementById('profileDropdown');
-        profileBtn.addEventListener('click', (e) => { e.stopPropagation(); profileDropdown.classList.toggle('active'); profileBtn.classList.toggle('active'); });
-        window.addEventListener('click', () => { if (profileDropdown.classList.contains('active')) { profileDropdown.classList.remove('active'); profileBtn.classList.remove('active'); } });
-        document.getElementById('file-input').addEventListener('change', function() {
-            document.getElementById('file-name').textContent = this.files[0] ? this.files[0].name : 'Nenhum arquivo selecionado.';
+        const profileBtn = document.getElementById("profileBtn");
+        const profileDropdown = document.getElementById("profileDropdown");
+        profileBtn.addEventListener("click", (e) => { e.stopPropagation(); profileDropdown.classList.toggle("active"); profileBtn.classList.toggle("active"); });
+        window.addEventListener("click", () => { if (profileDropdown.classList.contains("active")) { profileDropdown.classList.remove("active"); profileBtn.classList.remove("active"); } });
+        document.getElementById("file-input").addEventListener("change", function() {
+            document.getElementById("file-name").textContent = this.files[0] ? this.files[0].name : "Nenhum arquivo selecionado.";
+        });
+
+        // Sistema de navegação com transições
+        function navigateToPage(pageName) {
+            const mainContent = document.getElementById("mainContent");
+            
+            // Inicia a transição de saída
+            mainContent.classList.add("transitioning");
+            
+            // Após a transição, redireciona para a nova página
+            setTimeout(() => {
+                if (pageName === "dashboard") {
+                    window.location.href = "dashboard.html";
+                } else if (pageName === "cadastro") {
+                    window.location.href = "cadastro_de_pautas.html";
+                } else if (pageName === "painel") {
+                    window.location.href = "painel_votacao.html";
+                } else if (pageName === "vereadores") {
+                    window.location.href = "vereadores.html";
+                } else if (pageName === "ordem_do_dia") {
+                    window.location.href = "ordem_do_dia.html";
+                } else if (pageName === "relatorio") {
+                    window.location.href = "relatorio.html";
+                } else if (pageName === "editar_vereador") {
+                    window.location.href = "editar_vereador.html";
+                } else if (pageName === "nova_pauta") {
+                    window.location.href = "nova_pauta.html";
+                }
+            }, 200); // Metade da duração da transição para um efeito mais rápido
+        }
+
+        // Adiciona event listeners para os links de navegação
+        document.addEventListener("DOMContentLoaded", function() {
+            const navLinks = document.querySelectorAll("[data-page]");
+            
+            navLinks.forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const pageName = this.getAttribute("data-page");
+                    
+                    // Atualiza o estado ativo da navegação
+                    document.querySelectorAll(".nav-item").forEach(item => {
+                        item.classList.remove("active");
+                    });
+                    this.closest(".nav-item").classList.add("active");
+                    
+                    // Navega para a página
+                    navigateToPage(pageName);
+                });
+            });
         });
     </script>
 </body>
 </html>
+

@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Bem-vindo à Câmara Digital',
+                    'Bem-vindo ao Legisla Net',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,

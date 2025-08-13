@@ -50,6 +50,9 @@
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
         }
         .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
         .sidebar-header .logo-icon { font-size: 1.5rem; color: var(--accent-blue); }
@@ -61,7 +64,22 @@
         .nav-item.active a { background-color: var(--accent-blue); color: #ffffff; }
 
         /* --- Conteúdo Principal --- */
-        .main-content { flex-grow: 1; padding: 24px 32px; display: flex; flex-direction: column; }
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .main-content.transitioning {
+            opacity: 0;
+            transform: translateX(20px);
+        }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-shrink: 0; flex-wrap: wrap; gap: 16px; }
         .header-title { display: flex; align-items: center; gap: 12px; }
         .header-title i { font-size: 1.25rem; }
@@ -166,17 +184,18 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
-                <li class="nav-item active"><a href="#">Painel de votação</a></li>
-                <li class="nav-item"><a href="#">Cadastro de Pautas</a></li>
+                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item active"><a href="#" data-page="painel">Painel de votação</a></li>
+                <li class="nav-item"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
                 <li class="nav-group-title">Gerenciamento</li>
-                <li class="nav-item"><a href="#">Vereadores</a></li>
-                <li class="nav-item"><a href="#">Ordem do dia</a></li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
                 <li class="nav-group-title">Relatórios</li>
-                <li class="nav-item"><a href="#">Relatório de votações</a></li>
+                <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
             </ul>
         </aside>
 
-        <main class="main-content">
+        <main class="main-content" id="mainContent">
             
             <header class="content-header">
                 <div class="header-title">
@@ -286,8 +305,18 @@
                                     <span class="votante-name">VALDIVIA MOURA</span>
                                 </div>
                             </div>
-                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:21:10</div>
-                            <div class="voto-display voto-abstencao"><i class="fa-regular fa-circle"></i> Abstenção</div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:21:08</div>
+                            <div class="voto-display voto-nao"><i class="fa-regular fa-circle-xmark"></i> Não</div>
+                        </div>
+                        <div class="votante-card">
+                            <div class="votante-header">
+                                <div class="votante-info">
+                                    <img src="https://i.pravatar.cc/50?u=marcielene" alt="Avatar" class="votante-avatar">
+                                    <span class="votante-name">MARCILENE BARROS</span>
+                                </div>
+                            </div>
+                            <div class="votante-timestamp">Votou em: 30/07/2025 às 20:21:08</div>
+                            <div class="voto-display voto-abstencao"><i class="fa-solid fa-hand"></i> Abstenção</div>
                         </div>
                     </div>
                 </div>
@@ -296,8 +325,8 @@
     </div>
 
     <script>
-        // Lógica do Dropdown de Perfil
-        const profileBtn = document.getElementById('profileBtn' );
+        // Script para o dropdown do perfil
+        const profileBtn = document.getElementById('profileBtn');
         const profileDropdown = document.getElementById('profileDropdown');
         profileBtn.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -311,55 +340,90 @@
             }
         });
 
-        // Lógica do Gráfico de Pizza
-        Chart.defaults.color = 'var(--primary-text)';
+        // Gráfico de Votação
         const ctx = document.getElementById('votacaoChart').getContext('2d');
         const votacaoChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Sim', 'Não', 'Abstenção'],
                 datasets: [{
-                    label: 'Votos',
-                    data: [4, 1, 1],
+                    data: [5, 1, 1], // Exemplo de dados: 5 votos Sim, 1 Não, 1 Abstenção
                     backgroundColor: [
-                        'rgba(46, 160, 67, 0.8)',
-                        'rgba(218, 54, 51, 0.8)',
-                        'rgba(240, 136, 51, 0.8)'
+                        '#2ea043', // Verde para Sim
+                        '#da3633', // Vermelho para Não
+                        '#f08833'  // Laranja para Abstenção
                     ],
                     borderColor: [
-                        '#2ea043',
-                        '#da3633',
-                        '#f08833'
+                        '#0d1117',
+                        '#0d1117',
+                        '#0d1117'
                     ],
-                    borderWidth: 2,
-                    hoverOffset: 4
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
-                cutout: '70%',
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom',
                         labels: {
-                            color: 'var(--primary-text)',
-                            boxWidth: 15,
-                            padding: 20
-                        },
-                        onClick: null 
-                    },
-                    tooltip: {
-                        backgroundColor: 'var(--card-bg)',
-                        titleColor: 'var(--primary-text)',
-                        bodyColor: 'var(--secondary-text)',
-                        borderColor: 'var(--border-color)',
-                        borderWidth: 1
+                            color: 'var(--primary-text)' // Cor do texto da legenda
+                        }
                     }
                 }
             }
         });
-    </script>
 
+        // Sistema de navegação com transições
+        function navigateToPage(pageName) {
+            const mainContent = document.getElementById('mainContent');
+            
+            // Inicia a transição de saída
+            mainContent.classList.add('transitioning');
+            
+            // Após a transição, redireciona para a nova página
+            setTimeout(() => {
+                if (pageName === 'dashboard') {
+                    window.location.href = 'dashboard.html';
+                } else if (pageName === 'cadastro') {
+                    window.location.href = 'cadastro_de_pautas.html';
+                } else if (pageName === 'painel') {
+                    window.location.href = 'painel_votacao.html';
+                } else if (pageName === 'vereadores') {
+                    window.location.href = 'vereadores.html';
+                } else if (pageName === 'ordem_do_dia') {
+                    window.location.href = 'ordem_do_dia.html';
+                } else if (pageName === 'relatorio') {
+                    window.location.href = 'relatorio.html';
+                } else if (pageName === 'editar_vereador') {
+                    window.location.href = 'editar_vereador.html';
+                } else if (pageName === 'nova_pauta') {
+                    window.location.href = 'nova_pauta.html';
+                }
+            }, 200); // Metade da duração da transição para um efeito mais rápido
+        }
+
+        // Adiciona event listeners para os links de navegação
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('[data-page]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageName = this.getAttribute('data-page');
+                    
+                    // Atualiza o estado ativo da navegação
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.closest('.nav-item').classList.add('active');
+                    
+                    // Navega para a página
+                    navigateToPage(pageName);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+
