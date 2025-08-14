@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pauta - Câmara Digital</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <style>
+        :root {
+            --background-dark: #0d1117;
+            --sidebar-bg: #161b22;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #2ea043;
+            --accent-red: #da3633;
+            --accent-orange: #f08833;
+            --hover-bg: #21262d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--primary-text);
+            overflow-x: hidden;
+        }
+
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-header .logo-icon {
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-group-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            padding: 0 12px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--secondary-text);
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-text);
+        }
+
+        .nav-item.active a {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        /* --- Conteúdo Principal --- */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 24px 32px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .main-content.transitioning {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        /* Cabeçalho do Conteúdo */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title i {
+            font-size: 1.25rem;
+        }
+
+        .header-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            position: relative;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .profile-button:hover {
+            background-color: #2e343b;
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .profile-info .name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--primary-text);
+        }
+        .profile-info .email {
+            font-size: 0.75rem;
+            color: var(--primary-text);
+            opacity: 0.7;
+        }
+        .profile-button .fa-chevron-down {
+            transition: transform 0.2s;
+            color: var(--secondary-text);
+        }
+        .profile-button.active .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            width: 200px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 10;
+            overflow: hidden;
+        }
+        .profile-dropdown.active { display: block; }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        .dropdown-item:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-text);
+        }
+        .dropdown-item i { width: 16px; }
+        .dropdown-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 4px 0;
+        }
+
+        /* --- Formulário de Edição --- */
+        .form-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary-text);
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%238b949e" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 30px;
+        }
+
+        .file-upload-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-display .file-badge {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .file-display .btn-preview {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-preview:hover {
+            background-color: #2e343b;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-wrapper .custom-file-upload {
+            background-color: var(--hover-bg);
+            border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .custom-file-upload:hover {
+            background-color: #2e343b;
+        }
+
+        .file-name {
+            color: var(--secondary-text);
+            font-size: 0.875rem;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s ease, filter 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        .btn:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--hover-bg);
+            color: var(--primary-text);
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <!-- --- BARRA LATERAL --- -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-building-columns logo-icon"></i>
+                <h1>Câmara Digital</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-group-title">Acesso Rápido</li>
+                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="#" data-page="painel">Painel de votação</a></li>
+                <li class="nav-item"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
+                
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
+
+                <li class="nav-group-title">Relatórios</li>
+                <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
+            </ul>
+        </aside>
+
+        <!-- --- CONTEÚDO PRINCIPAL --- -->
+        <main class="main-content" id="mainContent">
+            
+            <!-- Cabeçalho do Conteúdo -->
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <h2>Editar Pauta</h2>
+                </div>
+                <div class="user-profile">
+                    <button class="profile-button" id="profileBtn">
+                        <div class="profile-avatar">A</div>
+                        <div class="profile-info">
+                            <span class="name">Admin DEL</span>
+                            <span class="email">admin_del@camara.digital</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Seção do Formulário de Edição -->
+            <section class="form-section">
+                <div class="form-group">
+                    <label for="autorPauta">Autor da pauta</label>
+                    <input type="text" id="autorPauta" value="Ver: Toinho de Quinca" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="nomePauta">Nome</label>
+                    <input type="text" id="nomePauta" value="Denúncia - 2ª votação">
+                </div>
+
+                <div class="form-group">
+                    <label for="statusPauta">Status da Pauta</label>
+                    <select id="statusPauta">
+                        <option value="finalizada">Finalizada</option>
+                        <option value="em_votacao">Em votação</option>
+                        <option value="pendente">Pendente</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricaoPauta">Descrição</label>
+                    <textarea id="descricaoPauta">Denúncia com pedido de instauração de Comissão Parlamentar de Inquérito</textarea>
+                </div>
+
+                <div class="file-upload-group">
+                    <label>Arquivo</label>
+                    <div class="file-display">
+                        <span class="file-badge">PDF</span>
+                        <button class="btn-preview"><i class="fa-solid fa-eye"></i> Ver Preview</button>
+                    </div>
+                    <div class="file-input-wrapper">
+                        <label for="fileInput" class="custom-file-upload">
+                            Escolher arquivo
+                        </label>
+                        <input type="file" id="fileInput">
+                        <span class="file-name">Nenhum arquivo escolhido</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary">Atualizar Pauta</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileBtn = document.getElementById('profileBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const mainContent = document.getElementById('mainContent');
+            const navLinks = document.querySelectorAll('.nav-item a');
+            const fileInput = document.getElementById('fileInput');
+            const fileNameSpan = document.querySelector('.file-name');
+
+            profileBtn.addEventListener('click', () => {
+                profileDropdown.classList.toggle('active');
+                profileBtn.classList.toggle('active');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!profileBtn.contains(event.target) && !profileDropdown.contains(event.target)) {
+                    profileDropdown.classList.remove('active');
+                    profileBtn.classList.remove('active');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    
+                    // Remove 'active' class from all nav items
+                    navLinks.forEach(nav => nav.closest('.nav-item').classList.remove('active'));
+                    // Add 'active' class to the clicked nav item
+                    link.closest('.nav-item').classList.add('active');
+
+                    mainContent.classList.add('transitioning');
+
+                    setTimeout(() => {
+                        let targetPage = '';
+                        switch(page) {
+                            case 'dashboard':
+                                targetPage = 'dashboard.html';
+                                break;
+                            case 'painel':
+                                targetPage = 'painel_votacao.html';
+                                break;
+                            case 'cadastro':
+                                targetPage = 'cadastro_de_pautas.html';
+                                break;
+                            case 'vereadores':
+                                targetPage = 'vereadores.html';
+                                break;
+                            case 'ordem_do_dia':
+                                targetPage = 'ordem_do_dia.html';
+                                break;
+                            case 'relatorio':
+                                targetPage = 'relatorio.html';
+                                break;
+                            // Add other cases for new pages
+                            default:
+                                targetPage = 'dashboard.html'; // Fallback
+                        }
+                        window.location.href = targetPage;
+                    }, 400); // Match CSS transition duration
+                });
+            });
+
+            fileInput.addEventListener('change', (event) => {
+                if (event.target.files.length > 0) {
+                    fileNameSpan.textContent = event.target.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'Nenhum arquivo escolhido';
+                }
+            });
+        });
+
+        function navigateToPage(page) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.classList.add('transitioning');
+            setTimeout(() => {
+                let targetPage = '';
+                switch(page) {
+                    case 'dashboard':
+                        targetPage = 'dashboard.html';
+                        break;
+                    case 'painel':
+                        targetPage = 'painel_votacao.html';
+                        break;
+                    case 'cadastro':
+                        targetPage = 'cadastro_de_pautas.html';
+                        break;
+                    case 'vereadores':
+                        targetPage = 'vereadores.html';
+                        break;
+                    case 'ordem_do_dia':
+                        targetPage = 'ordem_do_dia.html';
+                        break;
+                    case 'relatorio':
+                        targetPage = 'relatorio.html';
+                        break;
+                    default:
+                        targetPage = 'dashboard.html'; // Fallback
+                }
+                window.location.href = targetPage;
+            }, 400); // Match CSS transition duration
+        }
+    </script>
+</body>
+</html>
+
