@@ -3,43 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Câmara Digital - Login</title>
+    <title>Legisla Net - Login</title>
     
-    <!-- Favicon (ícone da aba do navegador) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📷</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
     
-    <!-- Fontes do Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Ícones (Font Awesome ) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
+    <link rel="stylesheet" href="../static/css/global.css">
+
     <style>
-        /* Reset e Variáveis de Cor */
-        :root {
-            --background-color: #0d1117; /* Cor de fundo escura (similar a GitHub Dark ) */
-            --form-background: #161b22;   /* Cor de fundo do formulário */
-            --primary-text: #e6edf3;      /* Cor do texto principal (branco suave) */
-            --secondary-text: #7d8590;    /* Cor do texto secundário (cinza) */
-            --border-color: #30363d;      /* Cor da borda */
-            --accent-color: #2f81f7;      /* Cor de destaque (links) */
-            --button-color: #238636;      /* Cor do botão principal (verde) */
-            --button-hover: #2ea043;      /* Cor do botão ao passar o mouse */
-        }
+        /* ESTILOS ESPECÍFICOS E NECESSÁRIOS PARA A PÁGINA DE LOGIN */
+        
+        /* O :root e o * foram removidos pois já existem no global.css */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Estilo do Corpo da Página */
+        /* Este 'body' sobrepõe o 'body' do global.css para garantir a centralização do form */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
-            color: var(--primary-text);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,7 +29,6 @@
             padding: 20px;
         }
 
-        /* Contêiner Principal do Login */
         .login-container {
             width: 100%;
             max-width: 380px;
@@ -55,28 +36,40 @@
             flex-direction: column;
             align-items: center;
             gap: 24px;
+            z-index: 1; /* Garante que o formulário fique sobre o background */
+        }
+        
+        .login-card {
+            width: 100%;
+            background-color: rgba(22, 27, 34, 0.85); /* Fundo semi-transparente */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 32px;
+            backdrop-filter: blur(10px); /* Efeito de vidro fosco */
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Logo e Título */
         .login-header {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 16px;
             text-align: center;
+            margin-bottom: 24px;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--secondary-text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-text);
         }
 
         .logo i {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
         }
 
         .login-header h1 {
@@ -84,12 +77,6 @@
             font-weight: 600;
         }
 
-        .login-header p {
-            color: var(--secondary-text);
-            font-size: 0.9rem;
-        }
-
-        /* Formulário */
         .login-form {
             width: 100%;
             display: flex;
@@ -112,7 +99,7 @@
         }
 
         .form-label a {
-            color: var(--accent-color);
+            color: var(--accent-blue);
             text-decoration: none;
             font-size: 0.8rem;
         }
@@ -122,7 +109,7 @@
         }
 
         .form-input {
-            background-color: var(--background-color);
+            background-color: var(--background-dark);
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 8px 12px;
@@ -134,8 +121,8 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.3);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
         }
 
         .password-group {
@@ -153,9 +140,8 @@
             cursor: pointer;
         }
 
-        /* Botão de Entrar */
         .submit-btn {
-            background-color: var(--button-color);
+            background-color: var(--accent-green);
             color: white;
             border: 1px solid rgba(240, 246, 252, 0.1);
             border-radius: 6px;
@@ -168,47 +154,41 @@
         }
 
         .submit-btn:hover {
-            background-color: var(--button-hover);
+            background-color: #2ea043;
         }
     </style>
 </head>
 <body>
-
     <div class="login-container">
-        
-        <div class="login-header">
-            <div class="logo">
-                <i class="fa-solid fa-camera-retro"></i>
-                <span>Câmara Digital</span>
-            </div>
-            <h1>Entre na sua conta</h1>
-            <p>Digite seu email abaixo para acessar sua conta</p>
+        <div class="logo">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Legisla Net</span>
         </div>
-
-        <form class="login-form" onsubmit="return false;">
-            <div class="form-group">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" class="form-input" placeholder="seu@email.com" required>
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Acesse sua conta</h1>
             </div>
-
-            <div class="form-group">
-                <div class="form-label">
-                    <label for="password">Senha</label>
-                    <a href="#">Esqueceu sua senha?</a>
+            <form class="login-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Digite seu email" required>
                 </div>
-                <div class="password-group">
-                    <input type="password" id="password" class="form-input" required>
-                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
-                        <i class="fa-regular fa-eye" id="password-icon"></i>
-                    </button>
+                <div class="form-group">
+                    <div class="form-label">
+                        <label for="password">Senha</label>
+                        <a href="#">Esqueceu sua senha?</a>
+                    </div>
+                    <div class="password-group">
+                        <input type="password" id="password" class="form-input" placeholder="Digite sua senha" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                            <i class="fa-regular fa-eye" id="password-icon"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <button type="submit" class="submit-btn">Entrar</button>
-        </form>
-
+                <button type="submit" class="submit-btn">Entrar</button>
+            </form>
+        </div>
     </div>
-
     <script>
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');

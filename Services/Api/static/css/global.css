@@ -15,6 +15,7 @@
     --hover-bg: #21262d;
     --excel-green: #1D6F42;
     --pdf-red: #B30B00;
+    --accent-purple: #8a3ab9; /* Adicionado para o efeito aurora */
 }
 
 * { 
@@ -28,7 +29,40 @@ body {
     background-color: var(--background-dark);
     color: var(--primary-text);
     overflow-x: hidden;
+    position: relative; /* Adicionado para posicionar o background */
 }
+
+/* --- INÍCIO: BACKGROUND AURORA BOREAL GLOBAL --- */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    /* Múltiplos gradientes radiais desfocados que formam as "luzes" */
+    background: 
+        radial-gradient(circle at 15% 25%, var(--accent-blue), transparent 25%),
+        radial-gradient(circle at 85% 35%, var(--accent-green), transparent 25%),
+        radial-gradient(circle at 50% 85%, var(--accent-purple), transparent 25%);
+    background-size: 200% 200%;
+    opacity: 0.15;
+    filter: blur(100px);
+    /* Animação que move os gradientes suavemente */
+    animation: move-aurora 20s infinite alternate ease-in-out;
+}
+
+@keyframes move-aurora {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+/* --- FIM: BACKGROUND AURORA BOREAL GLOBAL --- */
+
 
 /* --- Layout Principal da Aplicação --- */
 .app-layout { 
