@@ -169,6 +169,7 @@ class _VotacaoPautaScreenState extends State<VotacaoPautaScreen> {
     }
 
     return Card(
+      // ignore: deprecated_member_use
       color: isSelected ? optionColor.withOpacity(0.15) : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

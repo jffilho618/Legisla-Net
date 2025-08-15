@@ -13,241 +13,10 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
+    <link rel="stylesheet" href="../static/css/global.css">
+
     <style>
-        :root {
-            --background-dark: #0d1117;
-            --sidebar-bg: #161b22;
-            --card-bg: #161b22;
-            --border-color: #30363d;
-            --primary-text: #e6edf3;
-            --secondary-text: #8b949e;
-            --accent-blue: #58a6ff;
-            --accent-green: #2ea043;
-            --accent-red: #da3633;
-            --accent-orange: #f08833; /* Nova cor laranja */
-            --hover-bg: #21262d;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-dark );
-            color: var(--primary-text);
-            overflow-x: hidden;
-        }
-
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* --- Barra Lateral (Sidebar) --- */
-        .sidebar {
-            width: 250px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            position: fixed;
-            height: 100vh;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 32px;
-        }
-
-        .sidebar-header .logo-icon {
-            font-size: 1.5rem;
-            color: var(--accent-blue);
-        }
-
-        .sidebar-header h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .nav-menu {
-            list-style: none;
-            flex-grow: 1;
-        }
-
-        .nav-group-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--secondary-text);
-            text-transform: uppercase;
-            margin-top: 24px;
-            margin-bottom: 8px;
-            padding: 0 12px;
-        }
-
-        .nav-item a {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: var(--secondary-text);
-            font-weight: 500;
-            transition: background-color 0.2s, color 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-item a:hover {
-            background-color: var(--hover-bg);
-            color: var(--primary-text);
-        }
-
-        .nav-item.active a {
-            background-color: var(--accent-blue);
-            color: #ffffff;
-        }
-
-        
-        /* --- Conteúdo Principal --- */
-        .main-content {
-            flex-grow: 1;
-            margin-left: 250px;
-            padding: 24px 32px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            opacity: 1;
-            transform: translateX(0);
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .main-content.transitioning {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-
-        /* Cabeçalho do Conteúdo */
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-shrink: 0;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-title i {
-            font-size: 1.25rem;
-        }
-
-        .header-title h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .user-profile {
-            position: relative;
-        }
-
-        .profile-button {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background-color: var(--hover-bg);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .profile-button:hover {
-            background-color: #2e343b;
-        }
-
-        .profile-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--accent-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .profile-info .name {
-            font-weight: 600;
-            font-size: 0.875rem;
-            color: var(--primary-text);
-        }
-        .profile-info .email {
-            font-size: 0.75rem;
-            color: var(--primary-text);
-            opacity: 0.7;
-        }
-        .profile-button .fa-chevron-down {
-            transition: transform 0.2s;
-            color: var(--secondary-text);
-        }
-        .profile-button.active .fa-chevron-down {
-            transform: rotate(180deg);
-        }
-
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 110%;
-            right: 0;
-            width: 200px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            z-index: 10;
-            overflow: hidden;
-        }
-        .profile-dropdown.active { display: block; }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            color: var(--secondary-text);
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-        .dropdown-item:hover {
-            background-color: var(--hover-bg);
-            color: var(--primary-text);
-        }
-        .dropdown-item i { width: 16px; }
-        .dropdown-divider {
-            height: 1px;
-            background-color: var(--border-color);
-            margin: 4px 0;
-        }
-
-        /* --- Seção de Pautas --- */
+        /* ESTILOS ESPECÍFICOS DO CADASTRO DE PAUTAS */
         .pautas-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -268,29 +37,8 @@
         .pautas-header h2 {
             font-size: 1.25rem;
         }
-
-        /* CORREÇÃO: Estilos e animações dos botões */
-        .btn {
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s ease, filter 0.2s ease;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-        .btn:active {
-            transform: scale(0.98);
-            filter: brightness(0.95);
-        }
-
-        .btn-primary {
-            background-color: var(--accent-green);
-            color: white;
-        }
+        
+        /* Botão .btn-primary já está em global.css */
 
         .pautas-filters {
             display: flex;
@@ -334,7 +82,6 @@
             vertical-align: middle;
         }
         
-        /* CORREÇÃO: Borda aplicada na linha (tr) e não na célula (td) */
         .pautas-table tbody tr {
             border-bottom: 1px solid var(--border-color);
             transition: background-color 0.2s;
@@ -403,43 +150,12 @@
         .btn-remove {
             background-color: var(--accent-red);
         }
-
-        /* Paginação */
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
-            color: var(--secondary-text);
-            font-size: 0.875rem;
-        }
-
-        .pagination-controls a, .pagination-controls span {
-            padding: 6px 12px;
-            margin: 0 2px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: var(--secondary-text);
-            border: 1px solid transparent;
-        }
-        .pagination-controls a:hover {
-            border-color: var(--border-color);
-            color: var(--primary-text);
-        }
-        .pagination-controls .active {
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
 
     <div class="app-layout">
         
-        <!-- --- BARRA LATERAL --- -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <i class="fa-solid fa-building-columns logo-icon"></i>
@@ -460,10 +176,8 @@
             </ul>
         </aside>
 
-        <!-- --- CONTEÚDO PRINCIPAL --- -->
         <main class="main-content" id="mainContent">
             
-            <!-- Cabeçalho do Conteúdo -->
             <header class="content-header">
                 <div class="header-title">
                     <i class="fa-solid fa-file-lines"></i>
@@ -487,7 +201,6 @@
                 </div>
             </header>
 
-            <!-- Seção de Pautas -->
             <section class="pautas-section">
                 <div class="pautas-header">
                     <h2>Pautas</h2>
@@ -611,107 +324,7 @@
         </main>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const profileBtn = document.getElementById('profileBtn');
-            const profileDropdown = document.getElementById('profileDropdown');
-            const mainContent = document.getElementById('mainContent');
-            const navLinks = document.querySelectorAll('.nav-item a');
+    <script src="../static/js/global.js"></script>
 
-            profileBtn.addEventListener('click', () => {
-                profileDropdown.classList.toggle('active');
-                profileBtn.classList.toggle('active');
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!profileBtn.contains(event.target) && !profileDropdown.contains(event.target)) {
-                    profileDropdown.classList.remove('active');
-                    profileBtn.classList.remove('active');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = link.dataset.page;
-                    
-                    // Remove 'active' class from all nav items
-                    navLinks.forEach(nav => nav.closest('.nav-item').classList.remove('active'));
-                    // Add 'active' class to the clicked nav item
-                    link.closest('.nav-item').classList.add('active');
-
-                    mainContent.classList.add('transitioning');
-
-                    setTimeout(() => {
-                        // Simulate page change
-                        let targetPage = '';
-                        switch(page) {
-                            case 'dashboard':
-                                targetPage = 'dashboard.html';
-                                break;
-                            case 'painel':
-                                targetPage = 'painel_votacao.html';
-                                break;
-                            case 'cadastro':
-                                targetPage = 'cadastro_de_pautas.html';
-                                break;
-                            case 'vereadores':
-                                targetPage = 'vereadores.html';
-                                break;
-                            case 'ordem_do_dia':
-                                targetPage = 'ordem_do_dia.html';
-                                break;
-                            case 'relatorio':
-                                targetPage = 'relatorio.html';
-                                break;
-                            case 'nova_pauta':
-                                targetPage = 'nova_pauta.html';
-                                break;
-                            // Add other cases for new pages
-                            default:
-                                targetPage = 'dashboard.html'; // Fallback
-                        }
-                        window.location.href = targetPage;
-                        // mainContent.classList.remove('transitioning'); // This will be handled by the new page load
-                    }, 400); // Match CSS transition duration
-                });
-            });
-        });
-
-        function navigateToPage(page) {
-            const mainContent = document.getElementById('mainContent');
-            mainContent.classList.add('transitioning');
-            setTimeout(() => {
-                let targetPage = '';
-                switch(page) {
-                    case 'dashboard':
-                        targetPage = 'dashboard.html';
-                        break;
-                    case 'painel':
-                        targetPage = 'painel_votacao.html';
-                        break;
-                    case 'cadastro':
-                        targetPage = 'cadastro_de_pautas.html';
-                        break;
-                    case 'vereadores':
-                        targetPage = 'vereadores.html';
-                        break;
-                    case 'ordem_do_dia':
-                        targetPage = 'ordem_do_dia.html';
-                        break;
-                    case 'relatorio':
-                        targetPage = 'relatorio.html';
-                        break;
-                    case 'nova_pauta':
-                        targetPage = 'nova_pauta.html';
-                        break;
-                    default:
-                        targetPage = 'dashboard.html'; // Fallback
-                }
-                window.location.href = targetPage;
-            }, 400); // Match CSS transition duration
-        }
-    </script>
 </body>
 </html>
-
