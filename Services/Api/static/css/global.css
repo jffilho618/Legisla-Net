@@ -15,7 +15,7 @@
     --hover-bg: #21262d;
     --excel-green: #1D6F42;
     --pdf-red: #B30B00;
-    --accent-purple: #8a3ab9; /* Adicionado para o efeito aurora */
+    --accent-purple: #8a3ab9;
 }
 
 * { 
@@ -29,10 +29,10 @@ body {
     background-color: var(--background-dark);
     color: var(--primary-text);
     overflow-x: hidden;
-    position: relative; /* Adicionado para posicionar o background */
+    position: relative;
 }
 
-/* --- INÍCIO: BACKGROUND AURORA BOREAL GLOBAL --- */
+/* --- INÍCIO: BACKGROUND AURORA BOREAL ATUALIZADO --- */
 body::after {
     content: '';
     position: fixed;
@@ -41,16 +41,20 @@ body::after {
     width: 100%;
     height: 100%;
     z-index: -1;
-    /* Múltiplos gradientes radiais desfocados que formam as "luzes" */
+    
+    /* MODIFICAÇÃO: Adicionada mais uma cor (laranja) para maior variação */
     background: 
         radial-gradient(circle at 15% 25%, var(--accent-blue), transparent 25%),
         radial-gradient(circle at 85% 35%, var(--accent-green), transparent 25%),
-        radial-gradient(circle at 50% 85%, var(--accent-purple), transparent 25%);
+        radial-gradient(circle at 75% 85%, var(--accent-orange), transparent 25%), /* Nova cor */
+        radial-gradient(circle at 50% 75%, var(--accent-purple), transparent 25%);
+        
     background-size: 200% 200%;
     opacity: 0.15;
     filter: blur(100px);
-    /* Animação que move os gradientes suavemente */
-    animation: move-aurora 20s infinite alternate ease-in-out;
+    
+    /* MODIFICAÇÃO: Velocidade da animação aumentada (de 20s para 12s) */
+    animation: move-aurora 12s infinite alternate ease-in-out;
 }
 
 @keyframes move-aurora {
@@ -61,7 +65,7 @@ body::after {
         background-position: 100% 50%;
     }
 }
-/* --- FIM: BACKGROUND AURORA BOREAL GLOBAL --- */
+/* --- FIM: BACKGROUND AURORA BOREAL ATUALIZADO --- */
 
 
 /* --- Layout Principal da Aplicação --- */

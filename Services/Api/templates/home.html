@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legisla Net - Modernize sua Gestão Legislativa</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <style>
+        :root {
+            --background-dark: #0d1117;
+            --background-light: #161b22;
+            --border-color: #30363d;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #2ea043;
+            /* CORES ADICIONADAS */
+            --accent-purple: #8a3ab9;
+            --accent-orange: #f08833;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--primary-text);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* --- ANIMAÇÃO: AURORA BOREAL --- */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 25%, var(--accent-blue), transparent 25%),
+                radial-gradient(circle at 85% 35%, var(--accent-green), transparent 25%),
+                radial-gradient(circle at 75% 85%, var(--accent-orange), transparent 20%),
+                radial-gradient(circle at 50% 75%, var(--accent-purple), transparent 25%);
+            background-size: 200% 200%;
+            opacity: 0.15;
+            filter: blur(100px);
+            animation: move-aurora 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes move-aurora {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        /* --- FIM DA ANIMAÇÃO --- */
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- NAVEGAÇÃO --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 0;
+            z-index: 1000;
+            transition: background-color 0.3s, padding 0.3s;
+        }
+        .navbar.scrolled {
+            background-color: rgba(22, 27, 34, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-text);
+            text-decoration: none;
+        }
+        .nav-logo i { color: var(--accent-blue); }
+        .nav-menu-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-menu a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-menu a:hover { color: var(--primary-text); }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, filter 0.2s, background-color 0.2s, color 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background-color: var(--accent-green); color: white; }
+        .btn-secondary { background-color: var(--accent-blue); color: white; }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+        }
+        .btn-outline:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            filter: brightness(1.1);
+        }
+
+        /* --- SEÇÃO HERO --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(45deg, var(--accent-blue), var(--primary-text), var(--accent-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--secondary-text);
+            max-width: 700px;
+            margin: 0 auto 32px auto;
+        }
+
+        /* --- SEÇÕES GENÉRICAS --- */
+        .section { padding: 80px 0; }
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
+        .section-header p { font-size: 1.1rem; color: var(--secondary-text); max-width: 600px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card { background-color: var(--background-light); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); transition: transform 0.2s, border-color 0.2s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--accent-blue); }
+        .feature-card i { font-size: 2rem; color: var(--accent-blue); margin-bottom: 16px; }
+        .feature-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+        .feature-card p { color: var(--secondary-text); line-height: 1.6; }
+        #testimonials { background-color: var(--background-light); }
+        .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .testimonial-card { background-color: var(--background-dark); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .testimonial-text { color: var(--secondary-text); font-style: italic; margin-bottom: 16px; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; }
+        .author-info .name { font-weight: 600; }
+        .author-info .title { color: var(--secondary-text); font-size: 0.9rem; }
+        #cta { text-align: center; }
+        #cta .container { background-color: var(--background-light); padding: 48px; border-radius: 12px; border: 1px solid var(--border-color); }
+        #cta h2 { font-size: 2.5rem; margin-bottom: 16px; }
+        #cta p { font-size: 1.1rem; color: var(--secondary-text); margin-bottom: 32px; }
+        .footer { background-color: var(--background-light); padding: 48px 0; border-top: 1px solid var(--border-color); }
+        .footer-container { display: flex; justify-content: space-between; align-items: center; }
+        .footer-social a { color: var(--secondary-text); margin-left: 16px; font-size: 1.25rem; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--primary-text); }
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-header h2, #cta h2 { font-size: 2rem; }
+            .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .footer-container { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-logo"><i class="fa-solid fa-building-columns"></i> Legisla Net</a>
+            <div class="nav-menu-wrapper">
+                <ul class="nav-menu">
+                    <li><a href="#features">Recursos</a></li>
+                    <li><a href="#testimonials">Depoimentos</a></li>
+                </ul>
+                <a href="login.html" class="btn btn-outline">Entrar</a>
+                <a href="#" class="btn btn-primary">Solicitar Demonstração</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-content">
+            <h1>A Câmara Municipal do Futuro, Hoje.</h1>
+            <p>Uma plataforma completa e integrada para votações eletrônicas, gerenciamento de pautas, transmissão de sessões e transparência total para o cidadão.</p>
+            <a href="#" class="btn btn-secondary">Descubra como Modernizar</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="features" class="section">
+            <div class="container">
+                <div class="section-header fade-in-section">
+                    <h2>Tudo que sua câmara precisa em um só lugar</h2>
+                    <p>Simplifique processos, economize recursos e aumente a transparência com nossas ferramentas desenvolvidas para o setor público.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-check-to-slot"></i><h3>Painel de Votação em Tempo Real</h3><p>Realize votações nominais e simbólicas com apuração instantânea e exibição em painéis públicos ou transmissões online.</p></div>
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-file-alt"></i><h3>Gestão Completa de Pautas</h3><p>Cadastre, edite e organize pautas, projetos de lei e requerimentos de forma 100% digital, eliminando o uso de papel.</p></div>
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-gavel"></i><h3>Ordem do Dia e Sessões</h3><p>Controle o tempo de fala dos oradores e organize a pauta do dia de forma intuitiva, otimizando o andamento das sessões.</p></div>
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-chart-pie"></i><h3>Relatórios e Análises</h3><p>Gere relatórios detalhados de votações, frequência e produtividade legislativa com apenas alguns cliques.</p></div>
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-users"></i><h3>Perfis Institucionais</h3><p>Mantenha perfis atualizados da Câmara e dos vereadores, centralizando informações para o público e a imprensa.</p></div>
+                    <div class="feature-card fade-in-section"><i class="fa-solid fa-shield-halved"></i><h3>Segurança e Confiabilidade</h3><p>Nossa plataforma utiliza as melhores práticas de segurança para garantir a integridade e a autenticidade de todos os dados.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section">
+            <div class="container">
+                <div class="section-header fade-in-section">
+                    <h2>O que dizem nossos parceiros</h2>
+                    <p>Câmaras municipais que já transformaram sua gestão com a nossa plataforma.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card fade-in-section"><p class="testimonial-text">"A agilidade que ganhamos nas votações é incomparável. O sistema é robusto, intuitivo e eliminou completamente o uso de papel em nossas sessões. A transparência com o cidadão aumentou exponencialmente."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=presidente" alt="Foto do autor"><div class="author-info"><span class="name">João da Silva</span><span class="title">Presidente da Câmara de Vila Feliz</span></div></div></div>
+                    <div class="testimonial-card fade-in-section"><p class="testimonial-text">"Como Diretor de TI, eu precisava de uma solução segura e de fácil implementação. A plataforma 'Legisla Net' superou nossas expectativas. O suporte técnico é ágil e a equipe está sempre disposta a ajudar."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=diretor" alt="Foto do autor"><div class="author-info"><span class="name">Maria Oliveira</span><span class="title">Diretora de TI da Câmara de Porto Real</span></div></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta" class="section">
+            <div class="container fade-in-section">
+                <h2>Pronto para transformar sua câmara?</h2>
+                <p>Junte-se a dezenas de municípios que já estão no futuro da gestão legislativa. Agende uma demonstração gratuita e sem compromisso.</p>
+                <a href="#" class="btn btn-secondary">Solicitar Demonstração Agora</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2025 Legisla Net. Todos os direitos reservados.</p>
+            <div class="footer-social">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- SCRIPT PARA ANIMAÇÕES DE SCROLL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        const sections = document.querySelectorAll('.fade-in-section');
+        sections.forEach(section => observer.observe(section));
+
+        // --- SCRIPT PARA NAVEGAÇÃO STICKY ---
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
