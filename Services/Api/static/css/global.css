@@ -292,7 +292,7 @@ body::after {
     font-size: 0.75rem;
     font-weight: 600;
     background-color: rgba(46, 160, 67, 0.2);
-    color: #3fb950;
+    color: #71e67f;
     border: 1px solid rgba(46, 160, 67, 0.4);
 }
 .badge-reprovado {
@@ -302,7 +302,7 @@ body::after {
     font-size: 0.75rem;
     font-weight: 600;
     background-color: rgba(218, 54, 51, 0.2);
-    color: #f85149;
+    color: #fa918c;
     border: 1px solid rgba(218, 54, 51, 0.4);
 }
 

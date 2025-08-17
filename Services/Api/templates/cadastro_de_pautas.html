@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
     <link rel="stylesheet" href="../static/css/global.css">
+    <link rel="stylesheet" href="../static/css/modals.css">
 
     <style>
-        /* ESTILOS ESPECÍFICOS DO CADASTRO DE PAUTAS */
         .pautas-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -26,27 +26,21 @@
             display: flex;
             flex-direction: column;
         }
-
         .pautas-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
         }
-
         .pautas-header h2 {
             font-size: 1.25rem;
         }
-        
-        /* Botão .btn-primary já está em global.css */
-
         .pautas-filters {
             display: flex;
             align-items: center;
             gap: 16px;
             margin-bottom: 24px;
         }
-
         .filter-group {
             display: flex;
             align-items: center;
@@ -54,7 +48,6 @@
             color: var(--secondary-text);
             font-size: 0.875rem;
         }
-
         .custom-select {
             background-color: var(--hover-bg);
             border: 1px solid var(--border-color);
@@ -62,26 +55,21 @@
             padding: 6px 12px;
             border-radius: 6px;
         }
-
-        /* Tabela de Pautas */
         .table-container {
             flex-grow: 1;
             overflow-x: auto;
         }
-
         .pautas-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.875rem;
         }
-
         .pautas-table th, .pautas-table td {
             padding: 12px 16px;
             text-align: left;
             white-space: nowrap;
             vertical-align: middle;
         }
-        
         .pautas-table tbody tr {
             border-bottom: 1px solid var(--border-color);
             transition: background-color 0.2s;
@@ -89,14 +77,12 @@
         .pautas-table tbody tr:hover {
             background-color: var(--hover-bg);
         }
-
         .pautas-table th {
             color: var(--secondary-text);
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.75rem;
         }
-
         .pautas-table td .description {
             white-space: nowrap;
             overflow: hidden;
@@ -104,38 +90,11 @@
             max-width: 250px;
             display: block;
         }
-
         .pautas-table .link {
             color: var(--accent-blue);
             text-decoration: none;
             font-weight: 500;
         }
-
-        .status-cell {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-            min-width: 150px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 99px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-        .status-finalizada {
-            background-color: rgba(46, 160, 67, 0.2);
-            color: #3fb950;
-        }
-        .status-simbolica {
-            background-color: rgba(218, 54, 51, 0.2);
-            color: #f85149;
-        }
-
         .actions-cell {
             text-align: right;
         }
@@ -150,12 +109,86 @@
         .btn-remove {
             background-color: var(--accent-red);
         }
+        .status-cell {
+            position: relative;
+        }
+        .status-dropdown {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .status-badge-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px;
+            border-radius: 99px;
+            transition: background-color 0.2s;
+            border: 1px solid transparent;
+        }
+        .status-dropdown:hover .status-badge-wrapper {
+            background-color: var(--hover-bg);
+            border-color: var(--border-color);
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+        /* Cores originais das tags mantidas */
+        .status-badge.pendente { background-color: rgba(240, 227, 51, 0.2); color:rgb(233, 241, 110); }
+        .status-badge.em-votacao { background-color: rgba(88, 166, 255, 0.2); color:aqua }
+        .status-badge.finalizada { background-color: rgba(46, 160, 67, 0.2); color: #71e67f; }
+        .status-badge.simbolica { background-color: rgba(218, 54, 51, 0.2); color: #f85149; margin-top: 4px; }
+
+        .status-dropdown .fa-chevron-down {
+            color: var(--secondary-text);
+            font-size: 0.7rem;
+            margin-right: 8px;
+            transition: transform 0.2s;
+        }
+        .status-dropdown.open .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px;
+            z-index: 10;
+            min-width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .status-dropdown.open .dropdown-menu {
+            display: block;
+        }
+        .dropdown-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--primary-text);
+        }
+        .dropdown-item:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        .modal-body.confirm-text p {
+            line-height: 1.5;
+            color: var(--secondary-text);
+        }
     </style>
 </head>
 <body>
-
     <div class="app-layout">
-        
         <aside class="sidebar">
             <div class="sidebar-header">
                 <i class="fa-solid fa-building-columns logo-icon"></i>
@@ -165,18 +198,15 @@
                 <li class="nav-group-title">Acesso Rápido</li>
                 <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
                 <li class="nav-item active"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
-                
                 <li class="nav-group-title">Gerenciamento</li>
                 <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
                 <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
-
                 <li class="nav-group-title">Relatórios</li>
                 <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
             </ul>
         </aside>
 
         <main class="main-content" id="mainContent">
-            
             <header class="content-header">
                 <div class="header-title">
                     <i class="fa-solid fa-file-lines"></i>
@@ -192,7 +222,7 @@
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="profile-dropdown" id="profileDropdown">
-                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item" data-page="perfil"><i class="fa-regular fa-user"></i> Meu Perfil</a>
                         <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
@@ -238,13 +268,23 @@
                                 <td><span class="description">Denúncia com pedido de instauração...</span></td>
                                 <td><a href="#" class="link">Acessar</a></td>
                                 <td class="status-cell">
-                                    <span class="status-badge status-finalizada">FINALIZADA</span>
+                                    <div class="status-dropdown">
+                                        <div class="status-badge-wrapper">
+                                            <span class="status-badge finalizada">FINALIZADA</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item" data-value="pendente">Pendente</div>
+                                            <div class="dropdown-item" data-value="em-votacao">Em Votação</div>
+                                            <div class="dropdown-item" data-value="finalizada">Finalizada</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>Ver. Toinho de Quinca...</td>
                                 <td>Dom Expedito Lopes</td>
                                 <td class="actions-cell">
-                                    <button class="btn btn-action btn-edit">Editar</button>
-                                    <button class="btn btn-action btn-remove">Remover</button>
+                                    <button class="btn btn-action btn-edit" onclick="navigateToPage('editar_pauta')">Editar</button>
+                                    <button class="btn btn-action btn-remove" onclick="openModal('removerPautaModal')">Remover</button>
                                 </td>
                             </tr>
                             <tr>
@@ -252,14 +292,24 @@
                                 <td><span class="description">Denúncia com pedido de instauração...</span></td>
                                 <td><a href="#" class="link">Acessar</a></td>
                                 <td class="status-cell">
-                                    <span class="status-badge status-finalizada">FINALIZADA</span>
-                                    <span class="status-badge status-simbolica">Votação simbólica</span>
+                                    <div class="status-dropdown">
+                                        <div class="status-badge-wrapper">
+                                            <span class="status-badge pendente">PENDENTE</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item" data-value="pendente">Pendente</div>
+                                            <div class="dropdown-item" data-value="em-votacao">Em Votação</div>
+                                            <div class="dropdown-item" data-value="finalizada">Finalizada</div>
+                                        </div>
+                                    </div>
+                                    <span class="status-badge simbolica">Votação simbólica</span>
                                 </td>
                                 <td>Ver. Toinho de Quinca...</td>
                                 <td>Dom Expedito Lopes</td>
                                 <td class="actions-cell">
-                                    <button class="btn btn-action btn-edit">Editar</button>
-                                    <button class="btn btn-action btn-remove">Remover</button>
+                                    <button class="btn btn-action btn-edit" onclick="navigateToPage('editar_pauta')">Editar</button>
+                                    <button class="btn btn-action btn-remove" onclick="openModal('removerPautaModal')">Remover</button>
                                 </td>
                             </tr>
                             <tr>
@@ -267,13 +317,23 @@
                                 <td><span class="description">Institui o Dia do Comerciário no Mu...</span></td>
                                 <td><a href="#" class="link">Acessar</a></td>
                                 <td class="status-cell">
-                                    <span class="status-badge status-finalizada">FINALIZADA</span>
+                                     <div class="status-dropdown">
+                                        <div class="status-badge-wrapper">
+                                            <span class="status-badge finalizada">FINALIZADA</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item" data-value="pendente">Pendente</div>
+                                            <div class="dropdown-item" data-value="em-votacao">Em Votação</div>
+                                            <div class="dropdown-item" data-value="finalizada">Finalizada</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>Ver. João Lourende de Moura Araújo...</td>
                                 <td>Dom Expedito Lopes</td>
                                 <td class="actions-cell">
-                                    <button class="btn btn-action btn-edit">Editar</button>
-                                    <button class="btn btn-action btn-remove">Remover</button>
+                                    <button class="btn btn-action btn-edit" onclick="navigateToPage('editar_pauta')">Editar</button>
+                                    <button class="btn btn-action btn-remove" onclick="openModal('removerPautaModal')">Remover</button>
                                 </td>
                             </tr>
                             <tr>
@@ -281,14 +341,24 @@
                                 <td><span class="description">Institui o Dia do Comerciário no Mu...</span></td>
                                 <td><a href="#" class="link">Acessar</a></td>
                                 <td class="status-cell">
-                                    <span class="status-badge status-finalizada">FINALIZADA</span>
-                                    <span class="status-badge status-simbolica">Votação simbólica</span>
+                                     <div class="status-dropdown">
+                                        <div class="status-badge-wrapper">
+                                            <span class="status-badge finalizada">FINALIZADA</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item" data-value="pendente">Pendente</div>
+                                            <div class="dropdown-item" data-value="em-votacao">Em Votação</div>
+                                            <div class="dropdown-item" data-value="finalizada">Finalizada</div>
+                                        </div>
+                                    </div>
+                                    <span class="status-badge simbolica">Votação simbólica</span>
                                 </td>
                                 <td>Ver. João Lourende de Moura Araújo...</td>
                                 <td>Dom Expedito Lopes</td>
                                 <td class="actions-cell">
-                                    <button class="btn btn-action btn-edit">Editar</button>
-                                    <button class="btn btn-action btn-remove">Remover</button>
+                                    <button class="btn btn-action btn-edit" onclick="navigateToPage('editar_pauta')">Editar</button>
+                                    <button class="btn btn-action btn-remove" onclick="openModal('removerPautaModal')">Remover</button>
                                 </td>
                             </tr>
                             <tr>
@@ -296,19 +366,28 @@
                                 <td><span class="description">Institui o Dia do Comerciário no Mu...</span></td>
                                 <td><a href="#" class="link">Acessar</a></td>
                                 <td class="status-cell">
-                                    <span class="status-badge status-finalizada">FINALIZADA</span>
+                                     <div class="status-dropdown">
+                                        <div class="status-badge-wrapper">
+                                            <span class="status-badge em-votacao">EM VOTAÇÃO</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item" data-value="pendente">Pendente</div>
+                                            <div class="dropdown-item" data-value="em-votacao">Em Votação</div>
+                                            <div class="dropdown-item" data-value="finalizada">Finalizada</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>Ver. João Lourende de Moura Araújo...</td>
                                 <td>Dom Expedito Lopes</td>
                                 <td class="actions-cell">
-                                    <button class="btn btn-action btn-edit">Editar</button>
-                                    <button class="btn btn-action btn-remove">Remover</button>
+                                    <button class="btn btn-action btn-edit" onclick="navigateToPage('editar_pauta')">Editar</button>
+                                    <button class="btn btn-action btn-remove" onclick="openModal('removerPautaModal')">Remover</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
                 <div class="pagination-container">
                     <div class="pagination-controls">
                         <a href="#">&laquo; Anterior</a>
@@ -319,11 +398,71 @@
                     </div>
                 </div>
             </section>
-
         </main>
     </div>
 
-    <script src="../static/js/global.js"></script>
+    <div class="modal-overlay" id="removerPautaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Exclusão</h3>
+                <button class="modal-close" onclick="closeModal('removerPautaModal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body confirm-text">
+                <p>Você tem certeza que deseja remover esta pauta?</p>
+                <p>Esta ação não poderá ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('removerPautaModal')">Cancelar</button>
+                <button type="button" class="btn" style="background-color: var(--accent-red); color: white;">Excluir</button>
+            </div>
+        </div>
+    </div>
 
+    <script src="../static/js/global.js"></script>
+    <script src="../static/js/modals.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusDropdowns = document.querySelectorAll('.status-dropdown');
+            statusDropdowns.forEach(dropdown => {
+                const badgeWrapper = dropdown.querySelector('.status-badge-wrapper');
+                const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                
+                badgeWrapper.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    closeAllDropdowns(dropdown);
+                    dropdown.classList.toggle('open');
+                });
+
+                dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const newValue = item.getAttribute('data-value');
+                        const newText = item.textContent;
+                        const mainBadge = dropdown.querySelector('.status-badge-wrapper .status-badge');
+                        if (mainBadge) {
+                            // CORREÇÃO: Remove classes antigas antes de adicionar a nova
+                            mainBadge.classList.remove('pendente', 'em-votacao', 'finalizada');
+                            mainBadge.classList.add(newValue);
+                            mainBadge.textContent = newText.toUpperCase();
+                        }
+                        dropdown.classList.remove('open');
+                        console.log(`Status alterado para: ${newValue}`);
+                    });
+                });
+            });
+
+            function closeAllDropdowns(exceptThisOne = null) {
+                statusDropdowns.forEach(dropdown => {
+                    if (dropdown !== exceptThisOne) {
+                        dropdown.classList.remove('open');
+                    }
+                });
+            }
+
+            window.addEventListener('click', () => {
+                closeAllDropdowns();
+            });
+        });
+    </script>
 </body>
 </html>

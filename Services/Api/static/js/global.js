@@ -23,17 +23,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Sistema de navegação com transições ---
-    const navLinks = document.querySelectorAll('.nav-item a[data-page]');
+    // MODIFICAÇÃO: Agora seleciona TODOS os links com o atributo 'data-page',
+    // incluindo o novo link "Meu Perfil" no dropdown.
+    const navLinks = document.querySelectorAll('a[data-page]');
+    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const pageName = this.getAttribute('data-page');
             
-            // Atualiza o estado ativo da navegação no menu
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            this.closest('.nav-item').classList.add('active');
+            // Apenas atualiza o estado 'active' se o link estiver na sidebar principal
+            if (this.closest('.nav-item')) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.closest('.nav-item').classList.add('active');
+            }
             
             // Navega para a página com efeito
             navigateToPage(pageName);
@@ -44,12 +49,28 @@ document.addEventListener('DOMContentLoaded', function() {
 // Função de navegação reutilizável
 function navigateToPage(pageName) {
     const mainContent = document.getElementById('mainContent');
-    if (!mainContent) return;
+    if (!mainContent) {
+        // Se não houver 'mainContent' (ex: página de login), faz o redirecionamento direto
+        const targetUrl = getPageUrl(pageName);
+        if (targetUrl) {
+            window.location.href = targetUrl;
+        }
+        return;
+    }
 
-    // Adiciona classe para iniciar a animação de saída
     mainContent.classList.add('transitioning');
     
-    // Mapeamento de 'data-page' para nomes de arquivo .html
+    const targetUrl = getPageUrl(pageName);
+
+    setTimeout(() => {
+        if (targetUrl) {
+            window.location.href = targetUrl;
+        }
+    }, 200);
+}
+
+// Função auxiliar para mapear o nome da página para a URL
+function getPageUrl(pageName) {
     const pageMap = {
         'dashboard': 'dashboard.html',
         'painel': 'painel_votacao.html',
@@ -59,13 +80,8 @@ function navigateToPage(pageName) {
         'vereadores': 'vereadores.html',
         'editar_vereador': 'editar_vereador.html',
         'ordem_do_dia': 'ordem_do_dia.html',
-        'relatorio': 'relatorio.html'
+        'relatorio': 'relatorio.html',
+        'perfil': 'perfil_camara.html'
     };
-    
-    const targetUrl = pageMap[pageName] || 'dashboard.html'; // Fallback
-
-    // Após a transição, redireciona para a nova página
-    setTimeout(() => {
-        window.location.href = targetUrl;
-    }, 200); // Metade da duração da transição para um efeito mais rápido
+    return pageMap[pageName] || 'dashboard.html'; // Fallback
 }
