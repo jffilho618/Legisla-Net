@@ -22,9 +22,9 @@
             --secondary-text: #8b949e;
             --accent-blue: #58a6ff;
             --accent-green: #2ea043;
-            /* CORES ADICIONADAS */
             --accent-purple: #8a3ab9;
             --accent-orange: #f08833;
+            --accent-gold: #D4AF37;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,7 +39,6 @@
             position: relative;
         }
         
-        /* --- ANIMAÇÃO: AURORA BOREAL --- */
         body::after {
             content: '';
             position: fixed;
@@ -63,7 +62,6 @@
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
         }
-        /* --- FIM DA ANIMAÇÃO --- */
 
         .container {
             width: 100%;
@@ -72,7 +70,6 @@
             padding: 0 24px;
         }
 
-        /* --- NAVEGAÇÃO --- */
         .navbar {
             position: fixed;
             top: 0;
@@ -95,12 +92,18 @@
             align-items: center;
         }
         .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-text);
             text-decoration: none;
         }
-        .nav-logo i { color: var(--accent-blue); }
+        .nav-logo svg {
+            height: 32px;
+            width: auto;
+        }
         .nav-menu-wrapper {
             display: flex;
             align-items: center;
@@ -115,9 +118,28 @@
             color: var(--secondary-text);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s;
+            position: relative;
+            transition: color 0.3s ease;
+            padding-bottom: 8px;
         }
-        .nav-menu a:hover { color: var(--primary-text); }
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+        .nav-menu a:hover {
+            color: var(--primary-text);
+        }
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
         .btn {
             padding: 10px 20px;
             border-radius: 6px;
@@ -128,7 +150,6 @@
         .btn:hover { transform: translateY(-2px); }
         .btn-primary { background-color: var(--accent-green); color: white; }
         .btn-secondary { background-color: var(--accent-blue); color: white; }
-        
         .btn-outline {
             background-color: transparent;
             color: var(--accent-blue);
@@ -140,7 +161,6 @@
             filter: brightness(1.1);
         }
 
-        /* --- SEÇÃO HERO --- */
         .hero {
             position: relative;
             height: 100vh;
@@ -169,7 +189,16 @@
             margin: 0 auto 32px auto;
         }
 
-        /* --- SEÇÕES GENÉRICAS --- */
+        .animate-on-load {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-load.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .section { padding: 80px 0; }
         .section-header { text-align: center; margin-bottom: 48px; }
         .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
@@ -180,30 +209,85 @@
         .feature-card i { font-size: 2rem; color: var(--accent-blue); margin-bottom: 16px; }
         .feature-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
         .feature-card p { color: var(--secondary-text); line-height: 1.6; }
-        #testimonials { background-color: var(--background-light); }
-        .testimonials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .testimonial-card { background-color: var(--background-dark); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .testimonial-text { color: var(--secondary-text); font-style: italic; margin-bottom: 16px; }
+        
+        /* AJUSTE: ESTILO DOS DEPOIMENTOS APRIMORADO */
+        #testimonials {
+            background-color: var(--background-light);
+            padding: 80px 0;
+        }
+        .testimonial-carousel-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+        .testimonial-carousel {
+            display: flex;
+            width: calc(200% + 48px);
+            animation: scroll-testimonials 40s linear infinite;
+        }
+        .testimonial-card {
+            background: linear-gradient(145deg, var(--background-light), #101624);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            
+            /* --- CORREÇÃO APLICADA --- */
+            width: 100%;                 /* Ocupa o espaço disponível até o limite */
+            max-width: 450px;            /* Define a largura máxima ideal */
+            /* -------------------------- */
+
+            flex-shrink: 0;
+            margin: 0 12px;
+        }
+        @keyframes scroll-testimonials {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-100% - 24px)); }
+        }
+        .testimonial-card i.fa-quote-left {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-size: 1.5rem;
+            color: var(--border-color);
+        }
+        .testimonial-text { 
+            color: var(--secondary-text); 
+            font-style: italic; 
+            margin-bottom: 24px; 
+            padding-top: 16px;
+            line-height: 1.7;
+        }
         .testimonial-author { display: flex; align-items: center; gap: 12px; }
-        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; }
+        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent-blue); }
         .author-info .name { font-weight: 600; }
-        .author-info .title { color: var(--secondary-text); font-size: 0.9rem; }
+        .author-info .title { color: var(--accent-gold); font-size: 0.9rem; font-weight: 500; }
+
         #cta { text-align: center; }
         #cta .container { background-color: var(--background-light); padding: 48px; border-radius: 12px; border: 1px solid var(--border-color); }
         #cta h2 { font-size: 2.5rem; margin-bottom: 16px; }
         #cta p { font-size: 1.1rem; color: var(--secondary-text); margin-bottom: 32px; }
+        
+        /* AJUSTE: FOOTER CENTRALIZADO */
         .footer { background-color: var(--background-light); padding: 48px 0; border-top: 1px solid var(--border-color); }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; }
-        .footer-social a { color: var(--secondary-text); margin-left: 16px; font-size: 1.25rem; transition: color 0.2s; }
+        .footer-container { 
+            display: flex;
+            flex-direction: column; /* Empilha os itens verticalmente */
+            align-items: center;     /* Centraliza horizontalmente */
+            gap: 16px;               /* Adiciona espaço entre os itens */
+        }
+        .footer-social a { color: var(--secondary-text); margin: 0 12px; font-size: 1.25rem; transition: color 0.2s; }
         .footer-social a:hover { color: var(--primary-text); }
+        
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.visible { opacity: 1; transform: translateY(0); }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .section-header h2, #cta h2 { font-size: 2rem; }
-            .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonial-carousel { width: calc(400% + 96px); }
+            .testimonial-card { width: calc(100% - 24px); }
             .nav-menu { display: none; }
-            .footer-container { flex-direction: column; gap: 16px; }
         }
     </style>
 </head>
@@ -211,7 +295,18 @@
 
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="#" class="nav-logo"><i class="fa-solid fa-building-columns"></i> Legisla Net</a>
+            <a href="#" class="nav-logo">
+                <svg viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)" />
+                            <stop offset="100%" stop-color="var(--accent-green)" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" />
+                </svg>
+                <span>Legisla Net</span>
+            </a>
             <div class="nav-menu-wrapper">
                 <ul class="nav-menu">
                     <li><a href="#features">Recursos</a></li>
@@ -225,9 +320,9 @@
 
     <header class="hero">
         <div class="container hero-content">
-            <h1>A Câmara Municipal do Futuro, Hoje.</h1>
-            <p>Uma plataforma completa e integrada para votações eletrônicas, gerenciamento de pautas, transmissão de sessões e transparência total para o cidadão.</p>
-            <a href="#" class="btn btn-secondary">Descubra como Modernizar</a>
+            <h1 class="animate-on-load">A Câmara Municipal do Futuro, Hoje.</h1>
+            <p class="animate-on-load">Uma plataforma completa e integrada para votações eletrônicas, gerenciamento de pautas, transmissão de sessões e transparência total para o cidadão.</p>
+            <a href="#" class="btn btn-secondary animate-on-load">Descubra como Modernizar</a>
         </div>
     </header>
 
@@ -255,9 +350,17 @@
                     <h2>O que dizem nossos parceiros</h2>
                     <p>Câmaras municipais que já transformaram sua gestão com a nossa plataforma.</p>
                 </div>
-                <div class="testimonials-grid">
-                    <div class="testimonial-card fade-in-section"><p class="testimonial-text">"A agilidade que ganhamos nas votações é incomparável. O sistema é robusto, intuitivo e eliminou completamente o uso de papel em nossas sessões. A transparência com o cidadão aumentou exponencialmente."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=presidente" alt="Foto do autor"><div class="author-info"><span class="name">João da Silva</span><span class="title">Presidente da Câmara de Vila Feliz</span></div></div></div>
-                    <div class="testimonial-card fade-in-section"><p class="testimonial-text">"Como Diretor de TI, eu precisava de uma solução segura e de fácil implementação. A plataforma 'Legisla Net' superou nossas expectativas. O suporte técnico é ágil e a equipe está sempre disposta a ajudar."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=diretor" alt="Foto do autor"><div class="author-info"><span class="name">Maria Oliveira</span><span class="title">Diretora de TI da Câmara de Porto Real</span></div></div></div>
+            </div>
+            <div class="testimonial-carousel-wrapper">
+                <div class="testimonial-carousel">
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A agilidade que ganhamos nas votações é incomparável. O sistema é robusto, intuitivo e eliminou completamente o uso de papel em nossas sessões."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=presidente" alt="Foto do autor"><div class="author-info"><span class="name">João da Silva</span><span class="title">Presidente da Câmara de Vila Feliz</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"Como Diretor de TI, eu precisava de uma solução segura e de fácil implementação. O 'Legisla Net' superou nossas expectativas. O suporte técnico é ágil."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=diretor" alt="Foto do autor"><div class="author-info"><span class="name">Maria Oliveira</span><span class="title">Diretora de TI da Câmara de Porto Real</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A transparência com o cidadão aumentou exponencialmente. Hoje, qualquer pessoa pode acompanhar as votações em tempo real pelo site da câmara."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=cidadao" alt="Foto do autor"><div class="author-info"><span class="name">Carlos Andrade</span><span class="title">Jornalista e Cidadão de Monte Belo</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A economia de recursos é notável. Reduzimos nossos custos com impressão em mais de 80% desde a implementação do sistema. É um investimento que se paga."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=secretaria" alt="Foto do autor"><div class="author-info"><span class="name">Ana Costa</span><span class="title">Secretária Geral da Câmara de Rio Claro</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A agilidade que ganhamos nas votações é incomparável. O sistema é robusto, intuitivo e eliminou completamente o uso de papel em nossas sessões."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=presidente" alt="Foto do autor"><div class="author-info"><span class="name">João da Silva</span><span class="title">Presidente da Câmara de Vila Feliz</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"Como Diretor de TI, eu precisava de uma solução segura e de fácil implementação. O 'Legisla Net' superou nossas expectativas. O suporte técnico é ágil."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=diretor" alt="Foto do autor"><div class="author-info"><span class="name">Maria Oliveira</span><span class="title">Diretora de TI da Câmara de Porto Real</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A transparência com o cidadão aumentou exponencialmente. Hoje, qualquer pessoa pode acompanhar as votações em tempo real pelo site da câmara."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=cidadao" alt="Foto do autor"><div class="author-info"><span class="name">Carlos Andrade</span><span class="title">Jornalista e Cidadão de Monte Belo</span></div></div></div>
+                    <div class="testimonial-card"><i class="fa-solid fa-quote-left"></i><p class="testimonial-text">"A economia de recursos é notável. Reduzimos nossos custos com impressão em mais de 80% desde a implementação do sistema. É um investimento que se paga."</p><div class="testimonial-author"><img src="https://i.pravatar.cc/150?u=secretaria" alt="Foto do autor"><div class="author-info"><span class="name">Ana Costa</span><span class="title">Secretária Geral da Câmara de Rio Claro</span></div></div></div>
                 </div>
             </div>
         </section>
@@ -283,28 +386,35 @@
     </footer>
 
     <script>
-        // --- SCRIPT PARA ANIMAÇÕES DE SCROLL ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroElements = document.querySelectorAll('.animate-on-load');
+            heroElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, (index + 1) * 200);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const sections = document.querySelectorAll('.fade-in-section');
+            sections.forEach(section => observer.observe(section));
+
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
                 }
             });
-        }, {
-            threshold: 0.1
-        });
-
-        const sections = document.querySelectorAll('.fade-in-section');
-        sections.forEach(section => observer.observe(section));
-
-        // --- SCRIPT PARA NAVEGAÇÃO STICKY ---
-        const navbar = document.querySelector('.navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
         });
     </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vereadores - Câmara Digital</title>
+    <title>Vereadores - Legisla Net</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
     
@@ -19,6 +19,11 @@
 
     <style>
         /* ESTILOS ESPECÍFICOS E ÚNICOS DA PÁGINA DE VEREADORES */
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
         .vereadores-section { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
         .vereadores-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .vereadores-header h2 { font-size: 1.25rem; }
@@ -40,6 +45,7 @@
         .modal-body.confirm-text { color: var(--secondary-text); line-height: 1.5; }
         .cards-container { display: none; }
 
+
         @media (max-width: 992px) {
             .table-container { display: none; }
             .cards-container { display: grid; grid-template-columns: 1fr; gap: 12px; flex-grow: 1; }
@@ -54,8 +60,16 @@
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fa-solid fa-building-columns logo-icon"></i>
-                <h1>Câmara Digital</h1>
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)"></stop>
+                            <stop offset="100%" stop-color="var(--accent-green)"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z"></path>
+                </svg>
+                <h1>Legisla Net</h1>
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
@@ -74,7 +88,7 @@
             <header class="content-header">
                 <div class="header-title">
                     <i class="fa-solid fa-users"></i>
-                    <h2>Página</h2>
+                    <h2>Vereadores</h2>
                 </div>
                 <div class="user-profile">
                     <button class="profile-button" id="profileBtn">
@@ -94,24 +108,13 @@
                 </div>
             </header>
 
-            <section class="vereadores-section">
+            <section class="vereadores-section fade-in">
                 <div class="vereadores-header">
                     <h2>Vereadores</h2>
                     <button class="btn btn-primary" id="novoVereadorBtn">Novo Vereador</button>
                 </div>
 
                 <div class="table-container">
-                    <table class="vereadores-table">
-                        <thead>
-                            <tr>
-                                <th>Foto</th>
-                                <th>Nome</th>
-                                <th>Plenário</th>
-                                <th>Partido</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <div class="table-container">
                     <table class="vereadores-table">
                         <thead>
                             <tr>
@@ -189,7 +192,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
                     </table>
                 </div>
 
@@ -338,27 +340,27 @@
     <script src="../static/js/forms.js"></script>
 
     <script>
-        // Função específica da página de vereadores
-        function openEditModal(nome, partido, isPresidente = false) {
-            const nomeInput = document.getElementById('editNomeVereador');
-            const partidoSelect = document.getElementById('editPartidoVereador');
-            const toggle = document.getElementById('editPresidenteToggle');
-
-            if(nomeInput) nomeInput.value = nome;
-            if(partidoSelect) partidoSelect.value = partido;
-            
-            if (toggle) {
-                if (isPresidente) {
-                    toggle.classList.add('active');
-                } else {
-                    toggle.classList.remove('active');
-                }
-            }
-            
-            openModal('editarVereadorModal');
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
+            // Função específica da página de vereadores
+            function openEditModal(nome, partido, isPresidente = false) {
+                const nomeInput = document.getElementById('editNomeVereador');
+                const partidoSelect = document.getElementById('editPartidoVereador');
+                const toggle = document.getElementById('editPresidenteToggle');
+
+                if(nomeInput) nomeInput.value = nome;
+                if(partidoSelect) partidoSelect.value = partido;
+                
+                if (toggle) {
+                    if (isPresidente) {
+                        toggle.classList.add('active');
+                    } else {
+                        toggle.classList.remove('active');
+                    }
+                }
+                
+                openModal('editarVereadorModal');
+            }
+
             // Gatilho para o modal "Novo Vereador"
             const novoVereadorBtn = document.getElementById('novoVereadorBtn');
             if (novoVereadorBtn) {
@@ -385,6 +387,7 @@
                     closeModal('editarVereadorModal');
                 });
             }
+
         });
     </script>
 </body>

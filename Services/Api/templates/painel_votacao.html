@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Votação - Câmara Digital</title>
+    <title>Painel de Votação - Legisla Net</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
     
@@ -19,6 +19,11 @@
 
     <style>
         /* ESTILOS ESPECÍFICOS DO PAINEL DE VOTAÇÃO */
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
         
         /* Layout do Painel de Votação */
         .votacao-layout { 
@@ -139,8 +144,6 @@
         .voto-nao { background-color: var(--accent-red); }
         .voto-abstencao { background-color: var(--accent-orange); }
 
-        /* Badge de situação já está em global.css */
-
         /* RESPONSIVIDADE */
         @media (max-width: 1024px) { 
             .votacao-layout { 
@@ -158,8 +161,16 @@
         
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fa-solid fa-building-columns logo-icon"></i>
-                <h1>Câmara Digital</h1>
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)"></stop>
+                            <stop offset="100%" stop-color="var(--accent-green)"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z"></path>
+                </svg>
+                <h1>Legisla Net</h1>
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
@@ -177,8 +188,8 @@
             
             <header class="content-header">
                 <div class="header-title">
-                    <i class="fa-solid fa-table-columns"></i>
-                    <h2>Dashboard</h2>
+                    <i class="fa-solid fa-check-to-slot"></i>
+                    <h2>Painel de Votação</h2>
                 </div>
                 <div class="user-profile">
                     <button class="profile-button" id="profileBtn">
@@ -198,7 +209,7 @@
                 </div>
             </header>
 
-            <div class="votacao-layout">
+            <div class="votacao-layout fade-in">
                 <div class="info-column">
                     <div class="info-card">
                         <h3>Denúncia - 2ª votação</h3>
@@ -305,38 +316,41 @@
     <script src="../static/js/global.js"></script>
 
     <script>
-        // Gráfico de Votação
-        const ctx = document.getElementById('votacaoChart').getContext('2d');
-        const votacaoChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Sim', 'Não', 'Abstenção'],
-                datasets: [{
-                    data: [5, 1, 1], // Exemplo de dados: 5 votos Sim, 1 Não, 1 Abstenção
-                    backgroundColor: [
-                        '#2ea043', // Verde para Sim
-                        '#da3633', // Vermelho para Não
-                        '#f08833'  // Laranja para Abstenção
-                    ],
-                    borderColor: [
-                        '#0d1117',
-                        '#0d1117',
-                        '#0d1117'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'var(--primary-text)' // Cor do texto da legenda
+        document.addEventListener('DOMContentLoaded', () => {
+            // Gráfico de Votação
+            const ctx = document.getElementById('votacaoChart').getContext('2d');
+            const votacaoChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sim', 'Não', 'Abstenção'],
+                    datasets: [{
+                        data: [5, 1, 1], // Exemplo de dados: 5 votos Sim, 1 Não, 1 Abstenção
+                        backgroundColor: [
+                            '#2ea043', // Verde para Sim
+                            '#da3633', // Vermelho para Não
+                            '#f08833'  // Laranja para Abstenção
+                        ],
+                        borderColor: [
+                            '#0d1117',
+                            '#0d1117',
+                            '#0d1117'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'var(--primary-text)' // Cor do texto da legenda
+                            }
                         }
                     }
                 }
-            }
+            });
+
         });
     </script>
 </body>

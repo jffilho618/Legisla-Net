@@ -85,3 +85,24 @@ function getPageUrl(pageName) {
     };
     return pageMap[pageName] || 'dashboard.html'; // Fallback
 }
+
+// --- Script para Animação Fade-in com Intersection Observer ---
+const elementsToFadeIn = document.querySelectorAll('.fade-in');
+
+if (elementsToFadeIn.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Adiciona a classe que torna o elemento visível
+                entry.target.classList.add('visible');
+                // Para de observar o elemento após a animação para economizar recursos
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1 // A animação dispara quando 10% do elemento está visível
+    });
+
+    // Inicia a observação para cada elemento com a classe .fade-in
+    elementsToFadeIn.forEach(el => observer.observe(el));
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil da Câmara - Câmara Digital</title>
+    <title>Perfil da Câmara - Legisla Net</title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
     
@@ -17,6 +17,11 @@
 
     <style>
         /* ESTILOS ESPECÍFICOS DA PÁGINA DE PERFIL */
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
         .profile-layout {
             display: grid;
             grid-template-columns: 300px 1fr; /* Coluna fixa à esquerda, flexível à direita */
@@ -142,6 +147,7 @@
             color: var(--primary-text);
         }
 
+
         /* Responsividade */
         @media (max-width: 992px) {
             .profile-layout {
@@ -159,8 +165,16 @@
         
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fa-solid fa-building-columns logo-icon"></i>
-                <h1>Câmara Digital</h1>
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)"></stop>
+                            <stop offset="100%" stop-color="var(--accent-green)"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z"></path>
+                </svg>
+                <h1>Legisla Net</h1>
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
@@ -169,7 +183,7 @@
                 
                 <li class="nav-group-title">Gerenciamento</li>
                 <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
-                <li class="nav-item"><a href="#" data-page="ordem-do-dia">Ordem do dia</a></li>
+                <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
 
                 <li class="nav-group-title">Relatórios</li>
                 <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
@@ -201,7 +215,7 @@
                 </div>
             </header>
 
-            <div class="profile-layout">
+            <div class="profile-layout fade-in">
                 <aside class="profile-summary-card">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Bras%C3%A3o_de_Dom_Expedito_Lopes.png/180px-Bras%C3%A3o_de_Dom_Expedito_Lopes.png" alt="Brasão do Município" class="profile-picture">
                     <h2 class="profile-name">Câmara Municipal de Dom Expedito Lopes</h2>
@@ -262,6 +276,8 @@
     </div>
 
     <script src="../static/js/global.js"></script>
-
+    <script>
+        
+    </script>
 </body>
 </html>

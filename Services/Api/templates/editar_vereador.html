@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Vereador - Câmara Digital</title>
+    <title>Editar Vereador - Legisla Net</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,13 +13,28 @@
     <link rel="stylesheet" href="../static/css/global.css">
     <link rel="stylesheet" href="../static/css/forms.css">
 
+    <style>
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="app-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class="fa-solid fa-building-columns logo-icon"></i>
-                <h1>Câmara Digital</h1>
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)"></stop>
+                            <stop offset="100%" stop-color="var(--accent-green)"></stop>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z"></path>
+                </svg>
+                <h1>Legisla Net</h1>
             </div>
             <ul class="nav-menu">
                 <li class="nav-group-title">Acesso Rápido</li>
@@ -37,7 +52,7 @@
             <header class="content-header">
                 <div class="header-title">
                     <i class="fa-solid fa-user-pen"></i>
-                    <h2>Página</h2>
+                    <h2>Editar Vereador</h2>
                 </div>
                 <div class="user-profile">
                     <button class="profile-button" id="profileBtn">
@@ -57,7 +72,7 @@
                 </div>
             </header>
 
-            <section class="form-section">
+            <section class="form-section fade-in">
                 <form onsubmit="return false;">
                     <h2>Editar vereador</h2>
                     
@@ -104,6 +119,9 @@
 
     <script src="../static/js/global.js"></script>
     <script src="../static/js/forms.js"></script>
+    <script>
+        
+    </script>
 
 </body>
 </html>

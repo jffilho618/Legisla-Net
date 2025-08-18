@@ -16,11 +16,6 @@
     <link rel="stylesheet" href="../static/css/global.css">
 
     <style>
-        /* ESTILOS ESPECÍFICOS E NECESSÁRIOS PARA A PÁGINA DE LOGIN */
-        
-        /* O :root e o * foram removidos pois já existem no global.css */
-
-        /* Este 'body' sobrepõe o 'body' do global.css para garantir a centralização do form */
         body {
             display: flex;
             justify-content: center;
@@ -36,16 +31,16 @@
             flex-direction: column;
             align-items: center;
             gap: 24px;
-            z-index: 1; /* Garante que o formulário fique sobre o background */
+            z-index: 1;
         }
         
         .login-card {
             width: 100%;
-            background-color: rgba(22, 27, 34, 0.85); /* Fundo semi-transparente */
+            background-color: rgba(22, 27, 34, 0.85);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 32px;
-            backdrop-filter: blur(10px); /* Efeito de vidro fosco */
+            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
@@ -61,15 +56,16 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-text);
-        }
-
-        .logo i {
+            gap: 12px;
             font-size: 1.5rem;
-            color: var(--accent-blue);
+            font-weight: 700;
+            color: var(--primary-text);
+            text-decoration: none;
+        }
+        /* Estilo para o novo logo SVG */
+        .logo svg {
+            height: 32px;
+            width: auto;
         }
 
         .login-header h1 {
@@ -156,15 +152,41 @@
         .submit-btn:hover {
             background-color: #2ea043;
         }
+
+        /* --- NOVOS ESTILOS PARA ANIMAÇÃO DE ENTRADA --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInAnimation 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Atrasos diferentes para cada elemento criar um efeito cascata */
+        .logo { animation-delay: 0.1s; }
+        .login-card { animation-delay: 0.2s; }
+
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <i class="fa-solid fa-building-columns"></i>
+        <a href="#" class="logo fade-in">
+            <svg viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="var(--accent-blue)" />
+                        <stop offset="100%" stop-color="var(--accent-green)" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" />
+            </svg>
             <span>Legisla Net</span>
-        </div>
-        <div class="login-card">
+        </a>
+        <div class="login-card fade-in">
             <div class="login-header">
                 <h1>Acesse sua conta</h1>
             </div>
@@ -205,6 +227,5 @@
             }
         }
     </script>
-
 </body>
 </html>
