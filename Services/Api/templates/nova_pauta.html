@@ -73,6 +73,14 @@
             <section class="form-section fade-in">
                 <h2>Nova Pauta</h2>
                 <div class="form-group" style="margin-top: 24px;">
+                    <label for="sessao">Sessão</label>
+                    <select id="sessao" class="form-select">
+                        <option value="">Selecione a sessão correspondente</option>
+                        <option value="1">10ª Sessão extraordinária - 08/07/2025</option>
+                        <option value="2">15ª Sessão ordinária - 01/07/2025</option>
+                        </select>
+                </div>
+                <div class="form-group" style="margin-top: 24px;">
                     <label for="autor">Autor da pauta</label>
                     <input type="text" id="autor" class="form-input">
                 </div>
@@ -101,7 +109,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button class="btn-primary">Cadastrar Pauta</button>
+                    <button class="btn btn-primary">Cadastrar Pauta</button>
                     <div class="checkbox-group">
                         <input type="checkbox" id="simbolica">
                         <label for="simbolica">Deseja cadastrar votação simbólica?</label>

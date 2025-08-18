@@ -81,7 +81,8 @@ function getPageUrl(pageName) {
         'editar_vereador': 'editar_vereador.html',
         'ordem_do_dia': 'ordem_do_dia.html',
         'relatorio': 'relatorio.html',
-        'perfil': 'perfil_camara.html'
+        'perfil': 'perfil_camara.html',
+        'sessoes': 'nova_sessao.html'
     };
     return pageMap[pageName] || 'dashboard.html'; // Fallback
 }
