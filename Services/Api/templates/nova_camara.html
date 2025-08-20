@@ -17,10 +17,59 @@
     <link rel="stylesheet" href="../static/css/forms.css">
 
     <style>
+        :root{
+            --accent-orange: #f08833;
+            --accent-gold: #D4AF37;
+        }
+
         .sidebar-header .logo-svg {
             height: 32px;
             width: auto;
             flex-shrink: 0;
+        }
+
+        /* ADMIN BADGE NA SIDEBAR */
+        .admin-badge {
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));
+            color: #0d1117;
+            font-size: 0.7rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            text-align: center;
+            display: block;
+        }
+
+        /* USER INFO SIMPLES */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #D4AF37;
+        }
+
+        .user-details .name {
+            font-weight: 600;
+            display: block;
+            color: var(--primary-text);
+        }
+
+        .user-details .role {
+            font-size: 0.8rem;
+            color: #D4AF37;
         }
 
         /* --- ESTILOS DA LINHA DO TEMPO (STEPPER) --- */
@@ -194,6 +243,13 @@
                 <div class="header-title">
                     <i class="fa-solid fa-plus-circle"></i>
                     <h2>Cadastrar Nova Câmara</h2>
+                </div>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?u=admin" alt="Admin" class="user-avatar">
+                    <div class="user-details">
+                        <span class="name">Super Admin</span>
+                        <span class="role">Administrador</span>
+                    </div>
                 </div>
             </header>
             

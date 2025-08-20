@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Câmara - Legisla Net</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../static/css/global.css">
+    <link rel="stylesheet" href="../static/css/forms.css">
+    <link rel="stylesheet" href="../static/css/modals.css">
+
+    <style>
+        :root{
+            --accent-orange: #f08833;
+            --accent-gold: #D4AF37;
+        }
+
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        /* ADMIN BADGE NA SIDEBAR */
+        .admin-badge {
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));
+            color: #0d1117;
+            font-size: 0.7rem;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            text-align: center;
+            display: block;
+        }
+
+        /* USER INFO SIMPLES */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #D4AF37;
+        }
+
+        .user-details .name {
+            font-weight: 600;
+            display: block;
+            color: var(--primary-text);
+        }
+
+        .user-details .role {
+            font-size: 0.8rem;
+            color: #D4AF37;
+        }
+
+        /* --- ESTILO DO CONTAINER DE CONTEÚDO E BACKGROUND --- */
+        .main-content {
+            position: relative;
+        }
+        .background-logo-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .form-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- ESTILOS DAS ABAS DE NAVEGAÇÃO --- */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 32px;
+        }
+        .tab-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .tab-item:hover {
+            color: var(--primary-text);
+        }
+        .tab-item.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        /* --- ESTILOS DO CONTEÚDO DAS ABAS --- */
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ESTILOS PARA LISTAGEM DE ITENS (PARTIDOS/VEREADORES) --- */
+        .management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .management-header h3 {
+            font-size: 1.5rem;
+        }
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .item-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease-in-out;
+        }
+        .item-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+        }
+        .item-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .item-card-logo, .item-card-avatar {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .item-card-logo {
+            object-fit: contain;
+             background-color: #fff;
+            border-radius: 8px;
+            padding: 5px;
+        }
+         .item-card-avatar {
+            border-radius: 50%;
+        }
+        .item-card-info h4 { font-size: 1.1rem; }
+        .item-card-info p { color: var(--secondary-text); font-size: 0.9rem; }
+        .item-card-body { flex-grow: 1; }
+        .item-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .background-logo-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--accent-blue)" /><stop offset="100%" stop-color="var(--accent-green)" /></linearGradient></defs><path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" /></svg>
+                <h1>Legisla Net</h1>
+            </div>
+            
+            <div class="admin-badge">Administrador</div>
+            
+            <ul class="nav-menu">
+                <li class="nav-group-title">Administração</li>
+                <li class="nav-item active"><a href="#">Dashboard</a></li>
+                <li class="nav-item"><a href="#">Nova Câmara</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#">Configurações</a></li>
+                <li class="nav-item"><a href="#">Relatórios</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <div class="background-logo-container"></div>
+            
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-sliders"></i>
+                    <div>
+                        <h2>Gerenciar Câmara</h2>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?u=admin" alt="Admin" class="user-avatar">
+                    <div class="user-details">
+                        <span class="name">Super Admin</span>
+                        <span class="role">Administrador</span>
+                    </div>
+                </div>
+            </header>
+            
+            <section class="form-section fade-in">
+                <div class="tabs-nav">
+                    <button class="tab-item active" data-tab="info">Informações Gerais</button>
+                    <button class="tab-item" data-tab="partidos">Partidos Políticos</button>
+                    <button class="tab-item" data-tab="vereadores">Vereadores</button>
+                    <button class="tab-item" data-tab="midias">Mídias Sociais</button>
+                </div>
+
+                <div class="tabs-content">
+                    <div class="tab-pane active" id="info">
+                        <form>
+                            <div class="form-group toggle-group">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Status da Câmara (Ativa / Inativa)</span>
+                            </div>
+                            <div class="form-group"><label for="nome-camara">Nome da Câmara</label><input type="text" id="nome-camara" class="form-input" value="Câmara Municipal de Picos"></div>
+                            <div class="form-group"><label for="municipio">Município</label><input type="text" id="municipio" class="form-input" value="Picos"></div>
+                            <div class="form-group"><label for="estado">Estado</label><select id="estado" class="form-select"><option value="PI" selected>Piauí</option></select></div>
+                            <div class="form-group">
+                                <label>Brasão / Logo da Câmara</label>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bras%C3%A3o_de_Picos.png/200px-Bras%C3%A3o_de_Picos.png" alt="Logo atual" class="item-card-logo" style="width: 80px; height: 80px; margin-bottom: 16px;">
+                                <div class="file-input-wrapper">
+                                    <label for="file-input" class="file-input-button">Alterar...</label>
+                                    <span id="file-name" class="file-input-text">Nenhum novo arquivo selecionado.</span>
+                                    <input type="file" id="file-input">
+                                </div>
+                            </div>
+                            <div class="form-actions"><button type="submit" class="btn btn-primary">Salvar Alterações</button></div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane" id="partidos">
+                        <div class="management-header">
+                            <h3>Partidos Cadastrados</h3>
+                            <button class="btn btn-primary" onclick="openModal('addPartidoModal')"><i class="fa fa-plus"></i> Adicionar Partido</button>
+                        </div>
+                        <div class="item-grid">
+                            <div class="item-card">
+                                <div class="item-card-header">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Progressistas_logo.svg/200px-Progressistas_logo.svg.png" alt="Logo PP" class="item-card-logo">
+                                    <div class="item-card-info"><h4>Progressistas</h4><p>PP</p></div>
+                                </div>
+                                <div class="item-card-footer">
+                                    <button class="btn btn-secondary" onclick="openModal('addPartidoModal')">Editar</button>
+                                    <button class="btn" style="background-color: var(--accent-red); color: white;">Remover</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="vereadores">
+                        <div class="management-header">
+                            <h3>Vereadores</h3>
+                            <button class="btn btn-primary" onclick="openModal('addVereadorModal')"><i class="fa fa-plus"></i> Adicionar Vereador</button>
+                        </div>
+                        <div class="item-grid">
+                            <div class="item-card">
+                                <div class="item-card-header">
+                                    <img src="https://i.imgur.com/AsaIqWc.jpeg" alt="Foto Vereador" class="item-card-avatar">
+                                    <div class="item-card-info"><h4>MARCILENE BARROS</h4><p>Progressistas (PP)</p></div>
+                                </div>
+                                <div class="item-card-body"><p><strong>Cargos:</strong> Presidente</p></div>
+                                <div class="item-card-footer">
+                                    <button class="btn btn-secondary" onclick="openModal('addVereadorModal')">Editar</button>
+                                    <button class="btn" style="background-color: var(--accent-red); color: white;">Remover</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="midias">
+                        <form>
+                            <div class="form-group"><label for="facebook">Link do Facebook</label><input type="url" id="facebook" class="form-input" value="https://facebook.com/camarapicos"></div>
+                            <div class="form-group"><label for="instagram">Link do Instagram</label><input type="url" id="instagram" class="form-input" value="https://instagram.com/camarapicos"></div>
+                            <div class="form-group"><label for="twitter">Link do Twitter (X)</label><input type="url" id="twitter" class="form-input" value="https://x.com/camarapicos"></div>
+                            <div class="form-group"><label for="youtube">Link do YouTube</label><input type="url" id="youtube" class="form-input"></div>
+                            <div class="form-actions"><button type="submit" class="btn btn-primary">Salvar Links</button></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="addPartidoModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar / Editar Partido</h3>
+                <button class="modal-close" onclick="closeModal('addPartidoModal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group"><label>Nome do Partido</label><input type="text" class="form-input" placeholder="Ex: Progressistas"></div>
+                    <div class="form-group"><label>Sigla</label><input type="text" class="form-input" placeholder="Ex: PP"></div>
+                    <div class="form-group"><label>Logo do Partido</label><input type="file" class="form-input"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addPartidoModal')">Cancelar</button>
+                <button type="button" class="btn btn-primary">Salvar Partido</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="addVereadorModal">
+         <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar / Editar Vereador</h3>
+                <button class="modal-close" onclick="closeModal('addVereadorModal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group toggle-group" style="gap: 24px;">
+                         <div class="toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Presidente</span></div>
+                         <div class="toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Vice-Presidente</span></div>
+                    </div>
+                    <div class="form-group"><label>Nome do Vereador</label><input type="text" class="form-input"></div>
+                    <div class="form-group"><label>Partido</label><select class="form-select"><option>Progressistas (PP)</option></select></div>
+                    <div class="form-group"><label>Foto do Vereador</label><input type="file" class="form-input"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addVereadorModal')">Cancelar</button>
+                <button type="button" class="btn btn-primary">Salvar Vereador</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../static/js/global.js"></script>
+    <script src="../static/js/forms.js"></script>
+    <script src="../static/js/modals.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-item');
+            const panes = document.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('active'));
+                    panes.forEach(pane => pane.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetPane = document.getElementById(tab.dataset.tab);
+                    if(targetPane) {
+                        targetPane.classList.add('active');
+                    }
+                });
+            });
+
+            function getBackgroundImageUrl() {
+                return 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bras%C3%A3o_de_Picos.png/200px-Bras%C3%A3o_de_Picos.png';
+            }
+
+            const backgroundContainer = document.querySelector('.background-logo-container');
+            if (backgroundContainer) {
+                const imageUrl = getBackgroundImageUrl();
+                backgroundContainer.style.backgroundImage = `url('${imageUrl}')`;
+            }
+        });
+    </script>
+</body>
+</html>
