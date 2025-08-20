@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Câmara - Legisla Net</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../static/css/global.css">
+    <link rel="stylesheet" href="../static/css/forms.css">
+
+    <style>
+        .sidebar-header .logo-svg {
+            height: 32px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        /* --- ESTILOS DA LINHA DO TEMPO (STEPPER) --- */
+        .stepper-wrapper {
+            padding: 24px 0;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .stepper-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            position: relative;
+        }
+        .stepper-list::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--border-color);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .stepper-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            width: 120px;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+            transition: color 0.3s ease;
+        }
+        .stepper-item.active .step-number {
+            border-color: var(--accent-blue);
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        .stepper-item.active .step-label {
+            color: var(--primary-text);
+            font-weight: 500;
+        }
+        .stepper-item.completed .step-number {
+            border-color: var(--accent-green);
+            background-color: var(--accent-green);
+            color: white;
+        }
+        .stepper-item.completed .step-label {
+            color: var(--secondary-text);
+        }
+
+        /* --- ESTILOS DO FORMULÁRIO MULTI-ETAPAS --- */
+        .form-step { display: none; }
+        .form-step.active { display: block; }
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* --- ESTILOS PARA ADIÇÃO DINÂMICA (PARTIDOS E VEREADORES) --- */
+        .dynamic-card {
+            background-color: var(--background-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .card-header h4 { font-size: 1rem; color: var(--primary-text); }
+        .btn-remove-item {
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-remove-item:hover { color: var(--accent-red); }
+        
+        #add-item-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-style: dashed;
+        }
+        
+        .mesa-diretora-toggles {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+        
+        /* --- ESTILOS PARA A ETAPA DE REVISÃO --- */
+        .review-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--accent-blue);
+        }
+        .review-section p {
+            font-size: 1rem;
+            color: var(--secondary-text);
+            margin-bottom: 12px;
+        }
+        .review-section p strong {
+            color: var(--primary-text);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent-blue)" />
+                            <stop offset="100%" stop-color="var(--accent-green)" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" />
+                </svg>
+                <h1>Legisla Net</h1>
+            </div>
+            
+            <div class="admin-badge">Administrador</div>
+            
+            <ul class="nav-menu">
+                <li class="nav-group-title">Administração</li>
+                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item active"><a href="#">Nova Câmara</a></li>
+                <li class="nav-group-title">Gerenciamento</li>
+                <li class="nav-item"><a href="#" data-page="configuracoes">Configurações</a></li>
+                <li class="nav-item"><a href="#" data-page="relatorios">Relatórios</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <header class="content-header">
+                <div class="header-title">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <h2>Cadastrar Nova Câmara</h2>
+                </div>
+            </header>
+            
+            <section class="form-section fade-in">
+                <div class="stepper-wrapper">
+                    <ul class="stepper-list">
+                        <li class="stepper-item active"><div class="step-number">1</div><div class="step-label">Informações</div></li>
+                        <li class="stepper-item"><div class="step-number">2</div><div class="step-label">Partidos</div></li>
+                        <li class="stepper-item"><div class="step-number">3</div><div class="step-label">Vereadores</div></li>
+                        <li class="stepper-item"><div class="step-number">4</div><div class="step-label">Mídias Sociais</div></li>
+                        <li class="stepper-item"><div class="step-number">5</div><div class="step-label">Revisão</div></li>
+                    </ul>
+                </div>
+
+                <form id="nova-camara-form">
+                    <div class="form-step active">
+                        <h2>1. Informações da Câmara</h2>
+                        <div class="form-group" style="margin-top: 24px;">
+                            <label for="nome-camara">Nome da Câmara</label>
+                            <input type="text" id="nome-camara" class="form-input" placeholder="Ex: Câmara Municipal de Picos">
+                        </div>
+                        <div class="form-group">
+                            <label for="municipio">Município</label>
+                            <input type="text" id="municipio" class="form-input" placeholder="Ex: Picos">
+                        </div>
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select id="estado" class="form-select"><option value="">Selecione um estado</option><option value="PI">Piauí</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtd-vereadores">Quantidade de Vereadores</label>
+                            <input type="number" id="qtd-vereadores" class="form-input" placeholder="Ex: 9">
+                        </div>
+                        <div class="form-group">
+                            <label for="file-input">Brasão / Logo da Câmara</label>
+                            <div class="file-input-wrapper">
+                                <label for="file-input" class="file-input-button">Procurar...</label>
+                                <span id="file-name" class="file-input-text">Nenhum arquivo selecionado.</span>
+                                <input type="file" id="file-input">
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <span></span>
+                            <button type="button" class="btn btn-primary next-btn">Avançar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-step">
+                        <h2>2. Partidos Políticos</h2>
+                        <div id="partidos-container" style="margin-top: 24px;"></div>
+                        <button type="button" class="btn btn-secondary" id="add-partido-btn" style="width: 100%; border-style: dashed;">
+                            <i class="fa-solid fa-plus"></i> Adicionar Partido
+                        </button>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn">Voltar</button>
+                            <button type="button" class="btn btn-primary next-btn">Avançar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step">
+                        <h2>3. Cadastro de Vereadores</h2>
+                        <div id="vereadores-container" style="margin-top: 24px;"></div>
+                        <button type="button" class="btn btn-secondary" id="add-vereador-btn" style="width: 100%; border-style: dashed;">
+                            <i class="fa-solid fa-plus"></i> Adicionar Vereador
+                        </button>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn">Voltar</button>
+                            <button type="button" class="btn btn-primary next-btn">Avançar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step">
+                        <h2>4. Mídias Sociais</h2>
+                        <div class="form-group" style="margin-top: 24px;"><label for="facebook">Link do Facebook</label><input type="url" id="facebook" class="form-input" placeholder="https://facebook.com/camarapicos"></div>
+                        <div class="form-group"><label for="instagram">Link do Instagram</label><input type="url" id="instagram" class="form-input" placeholder="https://instagram.com/camarapicos"></div>
+                        <div class="form-group"><label for="twitter">Link do Twitter (X)</label><input type="url" id="twitter" class="form-input" placeholder="https://x.com/camarapicos"></div>
+                        <div class="form-group"><label for="youtube">Link do YouTube</label><input type="url" id="youtube" class="form-input" placeholder="https://youtube.com/camarapicos"></div>
+                        <div class="form-group" style="border-top: 1px solid var(--border-color); padding-top: 24px;">
+                            <label>Outro Link</label>
+                            <div style="display: flex; gap: 16px;">
+                                <input type="text" id="outro-nome" class="form-input" placeholder="Nome da Rede Social">
+                                <input type="url" id="outro-url" class="form-input" placeholder="URL">
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn">Voltar</button>
+                            <button type="button" class="btn btn-primary next-btn">Avançar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step">
+                        <h2>5. Revisão e Confirmação</h2>
+                        <div class="review-section" style="margin-top: 24px;">
+                            <h3>Informações da Câmara</h3>
+                            <p><strong>Nome:</strong> <span id="review-nome"></span></p>
+                            <p><strong>Local:</strong> <span id="review-local"></span></p>
+                            <h3 style="margin-top: 24px;">Partidos Políticos</h3>
+                            <p><strong>Total Cadastrado:</strong> <span id="review-partidos"></span></p>
+                            <h3 style="margin-top: 24px;">Vereadores</h3>
+                            <p><strong>Total Cadastrado:</strong> <span id="review-vereadores"></span></p>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn">Voltar</button>
+                            <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="../static/js/global.js"></script>
+    <script src="../static/js/forms.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const steps = document.querySelectorAll('.form-step');
+            const stepperItems = document.querySelectorAll('.stepper-item');
+            let currentStep = 0;
+
+            const updateStepper = () => {
+                stepperItems.forEach((item, index) => {
+                    item.classList.remove('active', 'completed');
+                    if (index < currentStep) item.classList.add('completed');
+                    else if (index === currentStep) item.classList.add('active');
+                });
+            };
+
+            const showStep = (stepIndex) => {
+                steps.forEach((step, index) => step.classList.toggle('active', index === stepIndex));
+            };
+
+            const partidosContainer = document.getElementById('partidos-container');
+            const vereadoresContainer = document.getElementById('vereadores-container');
+            let partidoCounter = 0;
+            let vereadorCounter = 0;
+
+            const updatePartidoSelects = () => {
+                const partidoCards = partidosContainer.querySelectorAll('.dynamic-card');
+                const options = Array.from(partidoCards).map(card => {
+                    const sigla = card.querySelector('.partido-sigla').value;
+                    const nome = card.querySelector('.partido-nome').value;
+                    if (!sigla) return null;
+                    return `<option value="${sigla}">${nome ? `${nome} (${sigla})` : sigla}</option>`;
+                }).filter(Boolean).join('');
+
+                vereadoresContainer.querySelectorAll('.vereador-partido-select').forEach(select => {
+                    const currentValue = select.value;
+                    select.innerHTML = `<option value="">Selecione o partido</option>${options}`;
+                    select.value = currentValue;
+                });
+            };
+
+            const addPartido = () => {
+                partidoCounter++;
+                const card = document.createElement('div');
+                card.className = 'dynamic-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h4>Partido ${partidoCounter}</h4>
+                        <button type="button" class="btn-remove-item"><i class="fa fa-trash"></i> Remover</button>
+                    </div>
+                    <div class="form-group"><label>Nome do Partido</label><input type="text" class="form-input partido-nome"></div>
+                    <div class="form-group"><label>Sigla</label><input type="text" class="form-input partido-sigla"></div>
+                    <div class="form-group">
+                        <label>Logo do Partido</label>
+                        <div class="file-input-wrapper">
+                            <label for="partido-logo-${partidoCounter}" class="file-input-button">Procurar...</label>
+                            <span class="file-input-text">Nenhum arquivo selecionado.</span>
+                            <input type="file" id="partido-logo-${partidoCounter}" class="dynamic-file-input">
+                        </div>
+                    </div>`;
+                partidosContainer.appendChild(card);
+                card.querySelector('.partido-nome').addEventListener('keyup', updatePartidoSelects);
+                card.querySelector('.partido-sigla').addEventListener('keyup', updatePartidoSelects);
+            };
+            
+            const addVereador = () => {
+                vereadorCounter++;
+                const card = document.createElement('div');
+                card.className = 'dynamic-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h4>Vereador ${vereadorCounter}</h4>
+                        <button type="button" class="btn-remove-item"><i class="fa fa-trash"></i> Remover</button>
+                    </div>
+                    <div class="mesa-diretora-toggles">
+                        <div class="form-group toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Presidente</span></div>
+                        <div class="form-group toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Vice-Presidente</span></div>
+                    </div>
+                    <div class="form-group"><label>Nome</label><input type="text" class="form-input"></div>
+                    <div class="form-group"><label>Partido</label><select class="form-select vereador-partido-select"><option>Selecione o partido</option></select></div>
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <div class="file-input-wrapper">
+                            <label for="vereador-foto-${vereadorCounter}" class="file-input-button">Procurar...</label>
+                            <span class="file-input-text">Nenhum arquivo selecionado.</span>
+                            <input type="file" id="vereador-foto-${vereadorCounter}" class="dynamic-file-input">
+                        </div>
+                    </div>`;
+                vereadoresContainer.appendChild(card);
+                updatePartidoSelects();
+            };
+
+            document.getElementById('add-partido-btn').addEventListener('click', addPartido);
+            document.getElementById('add-vereador-btn').addEventListener('click', addVereador);
+
+            document.getElementById('nova-camara-form').addEventListener('click', (e) => {
+                if (e.target.closest('.btn-remove-item')) {
+                    e.target.closest('.dynamic-card').remove();
+                    updatePartidoSelects();
+                }
+            });
+            document.getElementById('nova-camara-form').addEventListener('change', (e) => {
+                if (e.target.classList.contains('dynamic-file-input')) {
+                    e.target.previousElementSibling.textContent = e.target.files[0] ? e.target.files[0].name : 'Nenhum arquivo selecionado.';
+                }
+            });
+            
+            document.querySelectorAll('.next-btn').forEach(btn => btn.addEventListener('click', () => {
+                if (currentStep < steps.length - 1) {
+                    if (currentStep === 3) {
+                        document.getElementById('review-nome').textContent = document.getElementById('nome-camara').value;
+                        document.getElementById('review-local').textContent = `${document.getElementById('municipio').value} - ${document.getElementById('estado').value}`;
+                        document.getElementById('review-partidos').textContent = `${partidosContainer.children.length} partido(s)`;
+                        document.getElementById('review-vereadores').textContent = `${vereadoresContainer.children.length} vereador(es)`;
+                    }
+                    currentStep++;
+                    showStep(currentStep);
+                    updateStepper();
+                }
+            }));
+
+            document.querySelectorAll('.prev-btn').forEach(btn => btn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                    updateStepper();
+                }
+            }));
+
+            addPartido();
+            addVereador();
+            showStep(currentStep);
+            updateStepper();
+        });
+    </script>
+</body>
+</html>
