@@ -190,7 +190,7 @@
             <div class="login-header">
                 <h1>Acesse sua conta</h1>
             </div>
-            <form class="login-form" onsubmit="return false;">
+            <form id="login-form" class="login-form" onsubmit="return false;">
                 <div class="form-group">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" class="form-input" placeholder="Digite seu email" required>
@@ -226,6 +226,44 @@
                 passwordIcon.classList.add('fa-eye');
             }
         }
+
+        const loginForm = document.getElementById('login-form'); // Assumindo que seu form tem id="login-form"
+
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            // A MUDANÇA CRUCIAL ESTÁ AQUI: O URL completo da sua API
+            const response = await fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(result.error);
+                return;
+            }
+
+            // A lógica de redirecionamento continua a mesma
+            if (result.role === 'super_admin') {
+                // O caminho é relativo à estrutura da pasta 'web'
+                window.location.href = '../admin/dashboard_admin.html';
+            } else if (result.role === 'admin_camara') {
+                window.location.href = './dashboard.html'; // Relativo à pasta 'app'
+            } else {
+                alert('Tipo de usuário desconhecido.');
+            }
+
+        } catch (error) {
+            alert('Não foi possível conectar ao servidor da API.');
+        }
+    });
     </script>
 </body>
 </html>
