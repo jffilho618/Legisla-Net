@@ -100,6 +100,8 @@
             display: flex;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 32px;
+            overflow-x: auto;
+            gap: 4px;
         }
         .tab-item {
             padding: 12px 20px;
@@ -112,6 +114,7 @@
             position: relative;
             border-bottom: 2px solid transparent;
             transition: color 0.2s, border-color 0.2s;
+            white-space: nowrap;
         }
         .tab-item:hover {
             color: var(--primary-text);
@@ -134,7 +137,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- ESTILOS PARA LISTAGEM DE ITENS (PARTIDOS/VEREADORES) --- */
+        /* --- ESTILOS PARA LISTAGEM DE ITENS (PARTIDOS/VEREADORES/CREDENCIAIS) --- */
         .management-header {
             display: flex;
             justify-content: space-between;
@@ -194,10 +197,74 @@
             gap: 12px;
             padding-top: 16px;
         }
+
+        /* --- ESTILOS PARA CREDENCIAIS --- */
+        .credential-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .status-inactive {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        /* --- ESTILOS PARA MOSTRAR/ESCONDER SENHA --- */
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--primary-text);
+        }
         
         @media (max-width: 768px) {
             .background-logo-container {
                 display: none;
+            }
+            .tabs-nav {
+                gap: 0;
+            }
+            .tab-item {
+                padding: 12px 16px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -214,11 +281,11 @@
             
             <ul class="nav-menu">
                 <li class="nav-group-title">Administração</li>
-                <li class="nav-item active"><a href="#">Dashboard</a></li>
-                <li class="nav-item"><a href="#">Nova Câmara</a></li>
+                <li class="nav-item"><a href="dashboard_admin.html" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="nova_camara.html" data-page="nova-camara">Nova Câmara</a></li>
                 <li class="nav-group-title">Gerenciamento</li>
-                <li class="nav-item"><a href="#">Configurações</a></li>
-                <li class="nav-item"><a href="#">Relatórios</a></li>
+                <li class="nav-item"><a href="#" data-page="configuracoes">Configurações</a></li>
+                <li class="nav-item"><a href="#" data-page="relatorios">Relatórios</a></li>
             </ul>
         </aside>
 
@@ -246,6 +313,7 @@
                     <button class="tab-item active" data-tab="info">Informações Gerais</button>
                     <button class="tab-item" data-tab="partidos">Partidos Políticos</button>
                     <button class="tab-item" data-tab="vereadores">Vereadores</button>
+                    <button class="tab-item" data-tab="credenciais">Credenciais</button>
                     <button class="tab-item" data-tab="midias">Mídias Sociais</button>
                 </div>
 
@@ -314,6 +382,57 @@
                         </div>
                     </div>
 
+                    <div class="tab-pane" id="credenciais">
+                        <div class="management-header">
+                            <h3>Credenciais de Acesso</h3>
+                        </div>
+                        <div class="item-grid">
+                            <!-- Credencial da Câmara -->
+                            <div class="item-card">
+                                <div class="item-card-header">
+                                    <div class="credential-icon">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="item-card-info">
+                                        <h4>Acesso da Câmara</h4>
+                                        <p>Administrador da Câmara</p>
+                                    </div>
+                                </div>
+                                <div class="item-card-body">
+                                    <p><strong>Usuário:</strong> admin@camarapicos.pi.gov.br</p>
+                                    <p><strong>Status:</strong> <span class="status-badge status-active">Ativo</span></p>
+                                    <p><strong>Último Acesso:</strong> 21/08/2025 14:30</p>
+                                </div>
+                                <div class="item-card-footer">
+                                    <button class="btn btn-secondary" onclick="editCredential('camara')">Editar</button>
+                                    <button class="btn" style="background-color: var(--accent-red); color: white;">Desativar</button>
+                                </div>
+                            </div>
+
+                            <!-- Credencial de Vereador -->
+                            <div class="item-card">
+                                <div class="item-card-header">
+                                    <div class="credential-icon" style="background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="item-card-info">
+                                        <h4>MARCILENE BARROS</h4>
+                                        <p>Vereadora - Presidente</p>
+                                    </div>
+                                </div>
+                                <div class="item-card-body">
+                                    <p><strong>Usuário:</strong> marcilene.barros@camarapicos.pi.gov.br</p>
+                                    <p><strong>Status:</strong> <span class="status-badge status-active">Ativo</span></p>
+                                    <p><strong>Último Acesso:</strong> 20/08/2025 09:15</p>
+                                </div>
+                                <div class="item-card-footer">
+                                    <button class="btn btn-secondary" onclick="editCredential('vereador', 1)">Editar</button>
+                                    <button class="btn" style="background-color: var(--accent-red); color: white;">Desativar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="tab-pane" id="midias">
                         <form>
                             <div class="form-group"><label for="facebook">Link do Facebook</label><input type="url" id="facebook" class="form-input" value="https://facebook.com/camarapicos"></div>
@@ -328,6 +447,7 @@
         </main>
     </div>
 
+    <!-- Modal para Partido -->
     <div class="modal-overlay" id="addPartidoModal">
         <div class="modal-container">
             <div class="modal-header">
@@ -348,6 +468,7 @@
         </div>
     </div>
     
+    <!-- Modal para Vereador -->
     <div class="modal-overlay" id="addVereadorModal">
          <div class="modal-container">
             <div class="modal-header">
@@ -368,6 +489,100 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('addVereadorModal')">Cancelar</button>
                 <button type="button" class="btn btn-primary">Salvar Vereador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Credencial -->
+    <div class="modal-overlay" id="addCredentialModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Nova Credencial de Acesso</h3>
+                <button class="modal-close" onclick="closeModal('addCredentialModal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Tipo de Usuário</label>
+                        <select class="form-select" id="userType" onchange="toggleVereadorSelect()">
+                            <option value="">Selecione...</option>
+                            <option value="camara">Administrador da Câmara</option>
+                            <option value="vereador">Vereador</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="vereadorSelect" style="display: none;">
+                        <label>Selecionar Vereador</label>
+                        <select class="form-select">
+                            <option value="">Selecione um vereador...</option>
+                            <option value="1">MARCILENE BARROS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email/Usuário</label>
+                        <input type="email" class="form-input" placeholder="Ex: usuario@camarapicos.pi.gov.br">
+                    </div>
+                    <div class="form-group password-group">
+                        <label>Senha Temporária</label>
+                        <input type="password" class="form-input" id="tempPassword" placeholder="Senha será gerada automaticamente">
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('tempPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Forçar alteração de senha no primeiro login</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addCredentialModal')">Cancelar</button>
+                <button type="button" class="btn btn-primary">Criar Credencial</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Credencial -->
+    <div class="modal-overlay" id="editCredentialModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Credencial</h3>
+                <button class="modal-close" onclick="closeModal('editCredentialModal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Email/Usuário</label>
+                        <input type="email" class="form-input" id="editEmail">
+                    </div>
+                    <div class="form-group password-group">
+                        <label>Nova Senha (deixe em branco para manter atual)</label>
+                        <input type="password" class="form-input" id="editPassword" placeholder="Digite nova senha...">
+                        <button type="button" class="password-toggle-btn" onclick="togglePassword('editPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="editForceChange">
+                            <span class="slider"></span>
+                        </label>
+                        <span>Forçar alteração de senha no próximo login</span>
+                    </div>
+                    <div class="form-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="editStatus" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Conta ativa</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editCredentialModal')">Cancelar</button>
+                <button type="button" class="btn btn-primary">Salvar Alterações</button>
             </div>
         </div>
     </div>
@@ -403,6 +618,52 @@
                 backgroundContainer.style.backgroundImage = `url('${imageUrl}')`;
             }
         });
+
+        // Função para mostrar/esconder campo de seleção de vereador
+        function toggleVereadorSelect() {
+            const userType = document.getElementById('userType').value;
+            const vereadorSelect = document.getElementById('vereadorSelect');
+            
+            if (userType === 'vereador') {
+                vereadorSelect.style.display = 'block';
+            } else {
+                vereadorSelect.style.display = 'none';
+            }
+        }
+
+        // Função para mostrar/esconder senha
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Função para editar credencial
+        function editCredential(type, id = null) {
+            const modal = document.getElementById('editCredentialModal');
+            const title = modal.querySelector('.modal-title');
+            const emailInput = document.getElementById('editEmail');
+            
+            if (type === 'camara') {
+                title.textContent = 'Editar Credencial da Câmara';
+                emailInput.value = 'admin@camarapicos.pi.gov.br';
+            } else if (type === 'vereador') {
+                title.textContent = 'Editar Credencial do Vereador';
+                emailInput.value = 'marcilene.barros@camarapicos.pi.gov.br';
+            }
+            
+            openModal('editCredentialModal');
+        }
     </script>
 </body>
 </html>
