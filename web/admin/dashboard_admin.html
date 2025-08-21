@@ -458,46 +458,10 @@
 </head>
 <body>
     <div class="app-layout">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="var(--accent-blue)" />
-                            <stop offset="100%" stop-color="var(--accent-green)" />
-                        </linearGradient>
-                    </defs>
-                    <path fill="url(#logoGradient)" d="M 8 5 V 35 H 14 V 5 Z M 19 5 V 35 H 25 V 5 Z M 30 5 V 35 H 36 V 5 Z M 5 35 H 39 V 40 H 5 Z" />
-                </svg>
-                <h1>Legisla Net</h1>
-            </div>
-            
-            <div class="admin-badge">Administrador</div>
-            
-            <ul class="nav-menu">
-                <li class="nav-group-title">Administração</li>
-                <li class="nav-item active"><a href="#" data-page="dashboard">Dashboard</a></li>
-                <li class="nav-item"><a href="#" data-page="nova-camara">Nova Câmara</a></li>
-                <li class="nav-group-title">Gerenciamento</li>
-                <li class="nav-item"><a href="#" data-page="configuracoes">Configurações</a></li>
-                <li class="nav-item"><a href="#" data-page="relatorios">Relatórios</a></li>
-            </ul>
-        </aside>
+        <div id="sidebar-placeholder"></div>
 
         <main class="main-content" id="mainContent">
-            <header class="content-header">
-                <div class="header-title">
-                    <i class="fa-solid fa-tachometer-alt"></i>
-                    <h2>Dashboard Administrativo</h2>
-                </div>
-                <div class="user-info">
-                    <img src="https://i.pravatar.cc/150?u=admin" alt="Admin" class="user-avatar">
-                    <div class="user-details">
-                        <span class="name">Super Admin</span>
-                        <span class="role">Administrador</span>
-                    </div>
-                </div>
-            </header>
+            <div id="header-placeholder"></div>
 
             <section class="search-section fade-in">
                 <div class="search-container">
@@ -810,6 +774,17 @@
                         card.style.transform = 'translateY(0)';
                     });
                 }
+            });
+        });
+    </script>
+
+    <script src="../js/global.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initLayout({
+                title: 'Dashboard Administrativo',
+                icon: 'fa-tachometer-alt',
+                navActive: 'nav-dashboard'
             });
         });
     </script>
