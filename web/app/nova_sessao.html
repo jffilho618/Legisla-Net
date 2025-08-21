@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Vereador - Legisla Net</title>
+    <title>Nova Sessão - Legisla Net</title>
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     
-    <link rel="stylesheet" href="../static/css/global.css">
-    <link rel="stylesheet" href="../static/css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/forms.css">
 
     <style>
+        /* Único estilo necessário na página, para o logo SVG */
         .sidebar-header .logo-svg {
             height: 32px;
             width: auto;
@@ -22,7 +26,9 @@
     </style>
 </head>
 <body>
+
     <div class="app-layout">
+        
         <aside class="sidebar">
             <div class="sidebar-header">
                 <svg class="logo-svg" viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
@@ -41,19 +47,20 @@
                 <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
                 <li class="nav-item"><a href="#" data-page="cadastro">Cadastro de Pautas</a></li>
                 <li class="nav-group-title">Gerenciamento</li>
-                <li class="nav-item active"><a href="#" data-page="vereadores">Vereadores</a></li>
+                <li class="nav-item"><a href="#" data-page="vereadores">Vereadores</a></li>
                 <li class="nav-item"><a href="#" data-page="ordem_do_dia">Ordem do dia</a></li>
-                <li class="nav-item"><a href="#" data-page="sessoes">Sessões</a></li>
+                <li class="nav-item active"><a href="#" data-page="sessoes">Sessões</a></li>
                 <li class="nav-group-title">Relatórios</li>
                 <li class="nav-item"><a href="#" data-page="relatorio">Relatório de votações</a></li>
             </ul>
         </aside>
 
         <main class="main-content" id="mainContent">
+            
             <header class="content-header">
                 <div class="header-title">
-                    <i class="fa-solid fa-user-pen"></i>
-                    <h2>Editar Vereador</h2>
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <h2>Nova Sessão</h2>
                 </div>
                 <div class="user-profile">
                     <button class="profile-button" id="profileBtn">
@@ -65,7 +72,7 @@
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="profile-dropdown" id="profileDropdown">
-                        <a href="#" class="dropdown-item " data-page="perfil"><i class="fa-regular fa-user"></i> Meu Perfil</a>
+                        <a href="#" class="dropdown-item" data-page="perfil"><i class="fa-regular fa-user"></i> Meu Perfil</a>
                         <a href="#" class="dropdown-item"><i class="fa-regular fa-bell"></i> Notificações</a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
@@ -75,54 +82,46 @@
 
             <section class="form-section fade-in">
                 <form onsubmit="return false;">
-                    <h2>Editar vereador</h2>
+                    <h2>Cadastrar Nova Sessão</h2>
                     
-                    <div class="form-group toggle-group">
-                        <label class="toggle-switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                        <span>Presidente</span>
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label for="nome-sessao">Nome da Sessão</label>
+                        <input type="text" id="nome-sessao" class="form-input" placeholder="Ex: 12ª Sessão Ordinária do 2º Período">
                     </div>
 
                     <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input type="text" id="nome" class="form-input" value="MARCILENE BARROS">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="partido">Partido</label>
-                        <select id="partido" class="form-select">
-                            <option selected>PP - Partido Progressista</option>
-                            <option>MDB - Movimento Democrático Brasileiro</option>
-                            <option>PT - Partido dos Trabalhadores</option>
-                            <option>Republicanos</option>
+                        <label for="tipo-sessao">Tipo</label>
+                        <select id="tipo-sessao" class="form-select">
+                            <option value="ordinaria">Ordinária</option>
+                            <option value="extraordinaria">Extraordinária</option>
+                            <option value="solene">Solene</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="file-input">Foto</label>
-                        <img src="https://i.imgur.com/AsaIqWc.jpeg" alt="Foto atual de Marcilene Barros" class="current-photo">
-                        <div class="file-input-wrapper">
-                            <label for="file-input" class="file-input-button">Escolher arquivo</label>
-                            <span id="file-name" class="file-input-text">Nenhum arquivo escolhido</span>
-                            <input type="file" id="file-input">
-                        </div>
+                        <label for="data-sessao">Data da Sessão</label>
+                        <input type="date" id="data-sessao" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status-sessao">Status</label>
+                        <select id="status-sessao" class="form-select">
+                            <option value="agendada" selected>Agendada</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="finalizada">Finalizada</option>
+                        </select>
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Atualizar vereador</button>
+                        <button type="button" class="btn btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Sessão</button>
                     </div>
                 </form>
             </section>
         </main>
     </div>
 
-    <script src="../static/js/global.js"></script>
-    <script src="../static/js/forms.js"></script>
-    <script>
-        
-    </script>
+    <script src="../js/global.js"></script>
 
 </body>
 </html>
