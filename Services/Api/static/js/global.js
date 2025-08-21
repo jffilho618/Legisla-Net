@@ -46,6 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Função para detectar se estamos no contexto administrativo
+function isAdminContext() {
+    // Verifica se há badge de administrador na página
+    const adminBadge = document.querySelector('.admin-badge');
+    // Ou verifica se o URL atual contém páginas administrativas
+    const currentPage = window.location.pathname;
+    const adminPages = ['dashboard_admin.html', 'nova_camara.html', 'gerenciar_camara.html'];
+    
+    return adminBadge || adminPages.some(page => currentPage.includes(page));
+}
+
 // Função de navegação reutilizável
 function navigateToPage(pageName) {
     const mainContent = document.getElementById('mainContent');
@@ -71,7 +82,16 @@ function navigateToPage(pageName) {
 
 // Função auxiliar para mapear o nome da página para a URL
 function getPageUrl(pageName) {
-    const pageMap = {
+    // Mapas de páginas separados para contextos diferentes
+    const adminPageMap = {
+        'dashboard': 'dashboard_admin.html',
+        'nova-camara': 'nova_camara.html',
+        'configuracoes': 'configuracoes_admin.html',
+        'relatorios': 'relatorios_admin.html',
+        'perfil': 'perfil_admin.html'
+    };
+
+    const clientPageMap = {
         'dashboard': 'dashboard.html',
         'painel': 'painel_votacao.html',
         'cadastro': 'cadastro_de_pautas.html',
@@ -84,7 +104,14 @@ function getPageUrl(pageName) {
         'perfil': 'perfil_camara.html',
         'sessoes': 'nova_sessao.html'
     };
-    return pageMap[pageName] || 'dashboard.html'; // Fallback
+
+    // Escolhe o mapa apropriado baseado no contexto
+    const pageMap = isAdminContext() ? adminPageMap : clientPageMap;
+    
+    // Fallback para o dashboard apropriado
+    const defaultPage = isAdminContext() ? 'dashboard_admin.html' : 'dashboard.html';
+    
+    return pageMap[pageName] || defaultPage;
 }
 
 // --- Script para Animação Fade-in com Intersection Observer ---

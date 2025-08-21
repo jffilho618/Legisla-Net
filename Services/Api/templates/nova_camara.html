@@ -28,7 +28,6 @@
             flex-shrink: 0;
         }
 
-        /* ADMIN BADGE NA SIDEBAR */
         .admin-badge {
             background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));
             color: #0d1117;
@@ -43,7 +42,6 @@
             display: block;
         }
 
-        /* USER INFO SIMPLES */
         .user-info {
             display: flex;
             align-items: center;
@@ -72,7 +70,6 @@
             color: #D4AF37;
         }
 
-        /* --- ESTILOS DA LINHA DO TEMPO (STEPPER) --- */
         .stepper-wrapper {
             padding: 24px 0;
             margin-bottom: 32px;
@@ -141,7 +138,6 @@
             color: var(--secondary-text);
         }
 
-        /* --- ESTILOS DO FORMULÁRIO MULTI-ETAPAS --- */
         .form-step { display: none; }
         .form-step.active { display: block; }
         .form-navigation {
@@ -152,7 +148,6 @@
             border-top: 1px solid var(--border-color);
         }
         
-        /* --- ESTILOS PARA ADIÇÃO DINÂMICA (PARTIDOS E VEREADORES) --- */
         .dynamic-card {
             background-color: var(--background-dark);
             border: 1px solid var(--border-color);
@@ -178,20 +173,12 @@
         }
         .btn-remove-item:hover { color: var(--accent-red); }
         
-        #add-item-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border-style: dashed;
-        }
-        
         .mesa-diretora-toggles {
             display: flex;
             gap: 24px;
             margin-bottom: 16px;
         }
         
-        /* --- ESTILOS PARA A ETAPA DE REVISÃO --- */
         .review-section h3 {
             font-size: 1.25rem;
             margin-bottom: 16px;
@@ -207,6 +194,22 @@
         .review-section p strong {
             color: var(--primary-text);
             font-weight: 500;
+        }
+
+        /* --- ESTILOS PARA MOSTRAR/ESCONDER SENHA --- */
+        .password-group {
+            position: relative;
+        }
+        .password-toggle-btn {
+            position: absolute;
+            top: 50%;
+            right: 1px;
+            transform: translateY(-50%);
+            background-color: transparent;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            color: var(--secondary-text);
         }
     </style>
 </head>
@@ -230,7 +233,7 @@
             
             <ul class="nav-menu">
                 <li class="nav-group-title">Administração</li>
-                <li class="nav-item"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li class="nav-item"><a href="dashboard_admin.html" data-page="dashboard">Dashboard</a></li>
                 <li class="nav-item active"><a href="#">Nova Câmara</a></li>
                 <li class="nav-group-title">Gerenciamento</li>
                 <li class="nav-item"><a href="#" data-page="configuracoes">Configurações</a></li>
@@ -291,6 +294,22 @@
                                 <input type="file" id="file-input">
                             </div>
                         </div>
+
+                        <h3 style="margin-top: 32px; font-size: 1.25rem;">Credenciais de Acesso (Admin da Câmara)</h3>
+                        <div class="form-group" style="margin-top: 16px;">
+                            <label for="email-camara">Email de Acesso Principal</label>
+                            <input type="email" id="email-camara" class="form-input" placeholder="admin@camarapicos.leg.br">
+                        </div>
+                        <div class="form-group">
+                            <label for="senha-camara">Senha</label>
+                            <div class="password-group">
+                                <input type="password" id="senha-camara" class="form-input">
+                                <button type="button" class="password-toggle-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="form-navigation">
                             <span></span>
                             <button type="button" class="btn btn-primary next-btn">Avançar</button>
@@ -439,8 +458,16 @@
                         <div class="form-group toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Presidente</span></div>
                         <div class="form-group toggle-group"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label><span>Vice-Presidente</span></div>
                     </div>
-                    <div class="form-group"><label>Nome</label><input type="text" class="form-input"></div>
-                    <div class="form-group"><label>Partido</label><select class="form-select vereador-partido-select"><option>Selecione o partido</option></select></div>
+                    <div class="form-group"><label for="vereador-nome-${vereadorCounter}">Nome</label><input type="text" id="vereador-nome-${vereadorCounter}" class="form-input"></div>
+                    <div class="form-group"><label for="vereador-partido-${vereadorCounter}">Partido</label><select id="vereador-partido-${vereadorCounter}" class="form-select vereador-partido-select"><option>Selecione o partido</option></select></div>
+                    <div class="form-group"><label for="vereador-email-${vereadorCounter}">Email de Acesso</label><input type="email" id="vereador-email-${vereadorCounter}" class="form-input"></div>
+                    <div class="form-group">
+                        <label for="vereador-senha-${vereadorCounter}">Senha</label>
+                        <div class="password-group">
+                            <input type="password" id="vereador-senha-${vereadorCounter}" class="form-input">
+                            <button type="button" class="password-toggle-btn"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>Foto</label>
                         <div class="file-input-wrapper">
@@ -456,13 +483,32 @@
             document.getElementById('add-partido-btn').addEventListener('click', addPartido);
             document.getElementById('add-vereador-btn').addEventListener('click', addVereador);
 
-            document.getElementById('nova-camara-form').addEventListener('click', (e) => {
+            // --- LÓGICA DE EVENTOS (EVENT DELEGATION) ---
+            const form = document.getElementById('nova-camara-form');
+            form.addEventListener('click', (e) => {
+                // Lógica para remover item
                 if (e.target.closest('.btn-remove-item')) {
                     e.target.closest('.dynamic-card').remove();
                     updatePartidoSelects();
                 }
+
+                // Lógica para mostrar/esconder senha
+                const toggleBtn = e.target.closest('.password-toggle-btn');
+                if (toggleBtn) {
+                    const passwordInput = toggleBtn.previousElementSibling;
+                    const icon = toggleBtn.querySelector('i');
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                }
             });
-            document.getElementById('nova-camara-form').addEventListener('change', (e) => {
+            form.addEventListener('change', (e) => {
                 if (e.target.classList.contains('dynamic-file-input')) {
                     e.target.previousElementSibling.textContent = e.target.files[0] ? e.target.files[0].name : 'Nenhum arquivo selecionado.';
                 }

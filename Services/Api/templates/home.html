@@ -107,7 +107,7 @@
         .nav-menu-wrapper {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 16px; /* Ajustado */
         }
         .nav-menu {
             display: flex;
@@ -160,6 +160,17 @@
             color: white;
             filter: brightness(1.1);
         }
+        
+        /* ANIMAÇÃO DO BOTÃO PRINCIPAL */
+        .btn-cta-animated {
+            animation: pulse-blue 2.5s infinite;
+        }
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(88, 166, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0); }
+        }
+
 
         .hero {
             position: relative;
@@ -210,7 +221,6 @@
         .feature-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
         .feature-card p { color: var(--secondary-text); line-height: 1.6; }
         
-        /* AJUSTE: ESTILO DOS DEPOIMENTOS APRIMORADO */
         #testimonials {
             background-color: var(--background-light);
             padding: 80px 0;
@@ -230,12 +240,8 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             position: relative;
-            
-            /* --- CORREÇÃO APLICADA --- */
-            width: 100%;                 /* Ocupa o espaço disponível até o limite */
-            max-width: 450px;            /* Define a largura máxima ideal */
-            /* -------------------------- */
-
+            width: 100%;
+            max-width: 450px;
             flex-shrink: 0;
             margin: 0 12px;
         }
@@ -267,13 +273,12 @@
         #cta h2 { font-size: 2.5rem; margin-bottom: 16px; }
         #cta p { font-size: 1.1rem; color: var(--secondary-text); margin-bottom: 32px; }
         
-        /* AJUSTE: FOOTER CENTRALIZADO */
         .footer { background-color: var(--background-light); padding: 48px 0; border-top: 1px solid var(--border-color); }
         .footer-container { 
             display: flex;
-            flex-direction: column; /* Empilha os itens verticalmente */
-            align-items: center;     /* Centraliza horizontalmente */
-            gap: 16px;               /* Adiciona espaço entre os itens */
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
         }
         .footer-social a { color: var(--secondary-text); margin: 0 12px; font-size: 1.25rem; transition: color 0.2s; }
         .footer-social a:hover { color: var(--primary-text); }
@@ -312,8 +317,8 @@
                     <li><a href="#features">Recursos</a></li>
                     <li><a href="#testimonials">Depoimentos</a></li>
                 </ul>
-                <a href="login.html" class="btn btn-outline">Entrar</a>
-                <a href="#" class="btn btn-primary">Solicitar Demonstração</a>
+                <a href="portal_publico.html" class="btn btn-outline">Acompanhe sua Câmara</a>
+                <a href="login.html" class="btn btn-primary">Área do Cliente</a>
             </div>
         </div>
     </nav>
@@ -322,7 +327,7 @@
         <div class="container hero-content">
             <h1 class="animate-on-load">A Câmara Municipal do Futuro, Hoje.</h1>
             <p class="animate-on-load">Uma plataforma completa e integrada para votações eletrônicas, gerenciamento de pautas, transmissão de sessões e transparência total para o cidadão.</p>
-            <a href="#" class="btn btn-secondary animate-on-load">Descubra como Modernizar</a>
+            <a href="#" class="btn btn-secondary btn-cta-animated animate-on-load">Descubra como Modernizar</a>
         </div>
     </header>
 
