@@ -19,11 +19,6 @@
 
     <style>
         /* ESTILOS ESPECÍFICOS DA ORDEM DO DIA */
-        .sidebar-header .logo-svg {
-            height: 32px;
-            width: auto;
-            flex-shrink: 0;
-        }
         .oradores-section { 
             background-color: var(--card-bg); 
             border: 1px solid var(--border-color); 
@@ -81,13 +76,6 @@
         .action-icon:hover { color: var(--primary-text); }
         .action-icon.edit:hover { color: var(--accent-orange); }
         .action-icon.remove:hover { color: var(--accent-red); }
-
-        /* Estilo para modal de exclusão */
-        .modal-body.confirm-text {
-            color: var(--secondary-text);
-            font-size: 1rem;
-            line-height: 1.5;
-        }
 
         /* RESPONSIVIDADE */
         .cards-container { display: none; }
@@ -193,7 +181,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="data-input">Data</label>
+                    <label for="file-input">Data</label>
                     <input type="date" id="data-input" class="form-input" value="2025-08-06">
                 </div>
                 <div class="form-group">

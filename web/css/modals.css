@@ -84,3 +84,9 @@
         padding: 24px;
     }
 }
+
+.modal-body.confirm-text {
+    color: var(--secondary-text);
+    font-size: 1rem;
+    line-height: 1.5;
+}

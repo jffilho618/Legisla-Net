@@ -16,63 +16,9 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/forms.css">
     <link rel="stylesheet" href="../css/modals.css">
+    <link rel="stylesheet" href="../css/admin.css">
 
     <style>
-        :root{
-            --accent-orange: #f08833;
-            --accent-gold: #D4AF37;
-        }
-
-        .sidebar-header .logo-svg {
-            height: 32px;
-            width: auto;
-            flex-shrink: 0;
-        }
-
-        /* ADMIN BADGE NA SIDEBAR */
-        .admin-badge {
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));
-            color: #0d1117;
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-            text-align: center;
-            display: block;
-        }
-
-        /* USER INFO SIMPLES */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #D4AF37;
-        }
-
-        .user-details .name {
-            font-weight: 600;
-            display: block;
-            color: var(--primary-text);
-        }
-
-        .user-details .role {
-            font-size: 0.8rem;
-            color: #D4AF37;
-        }
-
         /* --- ESTILO DO CONTAINER DE CONTEÚDO E BACKGROUND --- */
         .main-content {
             position: relative;
@@ -603,23 +549,6 @@
                 vereadorSelect.style.display = 'block';
             } else {
                 vereadorSelect.style.display = 'none';
-            }
-        }
-
-        // Função para mostrar/esconder senha
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const button = input.nextElementSibling;
-            const icon = button.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
             }
         }
 

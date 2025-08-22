@@ -205,9 +205,101 @@ function initializeFadeInObserver() {
     elementsToFadeIn.forEach(el => observer.observe(el));
 }
 
+/**
+ * Sistema Unificado de Animações Fade-In
+ * Suporta: .fade-in, .animate-on-load, .fade-in-section
+ */
+function initUnifiedAnimations() {
+    // 1. Animações imediatas (hero sections)
+    const immediateElements = document.querySelectorAll('.animate-on-load');
+    immediateElements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('visible');
+        }, (index + 1) * 200);
+    });
+
+    // 2. Animações durante scroll (Intersection Observer)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Para de observar após animar
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px' // Ativa um pouco antes
+    });
+
+    // Observar todos os tipos de elementos
+    const scrollElements = document.querySelectorAll('.fade-in, .fade-in-section');
+    scrollElements.forEach(el => observer.observe(el));
+}
+
+// Manter compatibilidade com código existente
+function initFadeInAnimations() {
+    initUnifiedAnimations();
+}
+
 // Adiciona um listener global que espera o DOM carregar, mas não inicia o layout.
 // O layout será iniciado por uma chamada explícita em cada página HTML.
 document.addEventListener('DOMContentLoaded', () => {
     // Funções que não dependem de componentes podem ser chamadas aqui,
     // mas a maioria agora está em setupEventListeners().
 });
+
+
+// ===================================================================================
+// INICIALIZADOR DE COMPONENTES DE UI (ex: Dropdowns de Tabela)
+// ===================================================================================
+
+/**
+ * Inicializa a interatividade para os dropdowns de status encontrados na página.
+ * Procura por elementos com a classe '.status-dropdown' e adiciona os listeners.
+ */
+function initStatusDropdowns() {
+    const statusDropdowns = document.querySelectorAll('.status-dropdown');
+    if (statusDropdowns.length === 0) return;
+
+    const closeAllDropdowns = (exceptThisOne = null) => {
+        document.querySelectorAll('.status-dropdown.open').forEach(dropdown => {
+            if (dropdown !== exceptThisOne) {
+                dropdown.classList.remove('open');
+            }
+        });
+    };
+
+    statusDropdowns.forEach(dropdown => {
+        const badgeWrapper = dropdown.querySelector('.status-badge-wrapper');
+        const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+        
+        if (!badgeWrapper || !dropdownMenu) return;
+
+        badgeWrapper.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const wasOpen = dropdown.classList.contains('open');
+            closeAllDropdowns();
+            if (!wasOpen) {
+                dropdown.classList.add('open');
+            }
+        });
+
+        dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const newValue = item.getAttribute('data-value');
+                const newText = item.textContent;
+                const mainBadge = dropdown.querySelector('.status-badge-wrapper .status-badge');
+                if (mainBadge) {
+                    mainBadge.className = 'status-badge'; // Limpa classes antigas
+                    mainBadge.classList.add(newValue);
+                    mainBadge.textContent = newText.toUpperCase();
+                }
+                console.log(`Status alterado para: ${newValue}`);
+            });
+        });
+    });
+
+    window.addEventListener('click', () => {
+        closeAllDropdowns();
+    });
+}

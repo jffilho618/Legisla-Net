@@ -16,60 +16,9 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/forms.css">
     <link rel="stylesheet" href="../css/modals.css">
+    <link rel="stylesheet" href="../css/admin.css">
 
     <style>
-        :root{
-            --accent-orange: #f08833;
-            --accent-gold: #D4AF37;
-        }
-
-        .sidebar-header .logo-svg {
-            height: 32px;
-            width: auto;
-            flex-shrink: 0;
-        }
-
-        .admin-badge {
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange));
-            color: #0d1117;
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-            text-align: center;
-            display: block;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #D4AF37;
-        }
-
-        .user-details .name {
-            font-weight: 600;
-            display: block;
-            color: var(--primary-text);
-        }
-
-        .user-details .role {
-            font-size: 0.8rem;
-            color: #D4AF37;
-        }
 
         .stepper-wrapper {
             padding: 24px 0;
@@ -195,22 +144,6 @@
         .review-section p strong {
             color: var(--primary-text);
             font-weight: 500;
-        }
-
-        /* --- ESTILOS PARA MOSTRAR/ESCONDER SENHA --- */
-        .password-group {
-            position: relative;
-        }
-        .password-toggle-btn {
-            position: absolute;
-            top: 50%;
-            right: 1px;
-            transform: translateY(-50%);
-            background-color: transparent;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            color: var(--secondary-text);
         }
     </style>
 </head>
@@ -347,6 +280,8 @@
 
     <script src="../js/global.js"></script>
     <script src="../js/forms.js"></script>
+    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const steps = document.querySelectorAll('.form-step');
