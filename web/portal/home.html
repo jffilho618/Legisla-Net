@@ -10,158 +10,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/animations.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
-    <style>
-        :root {
-            --background-dark: #0d1117;
-            --background-light: #161b22;
-            --border-color: #30363d;
-            --primary-text: #e6edf3;
-            --secondary-text: #8b949e;
-            --accent-blue: #58a6ff;
-            --accent-green: #2ea043;
-            --accent-purple: #8a3ab9;
-            --accent-orange: #f08833;
-            --accent-gold: #D4AF37;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-dark);
-            color: var(--primary-text);
-            overflow-x: hidden;
-            position: relative;
-        }
+    <style>    
+        /* Remover CSS de animação duplicado */
+        /* .animate-on-load { ... } - REMOVIDO */
         
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 25%, var(--accent-blue), transparent 25%),
-                radial-gradient(circle at 85% 35%, var(--accent-green), transparent 25%),
-                radial-gradient(circle at 75% 85%, var(--accent-orange), transparent 20%),
-                radial-gradient(circle at 50% 75%, var(--accent-purple), transparent 25%);
-            background-size: 200% 200%;
-            opacity: 0.15;
-            filter: blur(100px);
-            animation: move-aurora 12s infinite alternate ease-in-out;
-        }
-
-        @keyframes move-aurora {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 16px 0;
-            z-index: 1000;
-            transition: background-color 0.3s, padding 0.3s;
-        }
-        .navbar.scrolled {
-            background-color: rgba(22, 27, 34, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 0;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-text);
-            text-decoration: none;
-        }
-        .nav-logo svg {
-            height: 32px;
-            width: auto;
-        }
-        .nav-menu-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 16px; /* Ajustado */
-        }
-        .nav-menu {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-        .nav-menu a {
-            color: var(--secondary-text);
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-            transition: color 0.3s ease;
-            padding-bottom: 8px;
-        }
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--accent-blue);
-            transition: width 0.3s ease;
-        }
-        .nav-menu a:hover {
-            color: var(--primary-text);
-        }
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, filter 0.2s, background-color 0.2s, color 0.2s;
-        }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-primary { background-color: var(--accent-green); color: white; }
-        .btn-secondary { background-color: var(--accent-blue); color: white; }
-        .btn-outline {
-            background-color: transparent;
-            color: var(--accent-blue);
-            border: 1px solid var(--accent-blue);
-        }
-        .btn-outline:hover {
-            background-color: var(--accent-blue);
-            color: white;
-            filter: brightness(1.1);
-        }
-        
-        /* ANIMAÇÃO DO BOTÃO PRINCIPAL */
+        /* Manter apenas estilos específicos da página */
         .btn-cta-animated {
             animation: pulse-blue 2.5s infinite;
         }
@@ -200,20 +58,6 @@
             margin: 0 auto 32px auto;
         }
 
-        .animate-on-load {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-on-load.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section { padding: 80px 0; }
-        .section-header { text-align: center; margin-bottom: 48px; }
-        .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
-        .section-header p { font-size: 1.1rem; color: var(--secondary-text); max-width: 600px; margin: 0 auto; }
         .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         .feature-card { background-color: var(--background-light); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); transition: transform 0.2s, border-color 0.2s; }
         .feature-card:hover { transform: translateY(-5px); border-color: var(--accent-blue); }
@@ -273,18 +117,6 @@
         #cta h2 { font-size: 2.5rem; margin-bottom: 16px; }
         #cta p { font-size: 1.1rem; color: var(--secondary-text); margin-bottom: 32px; }
         
-        .footer { background-color: var(--background-light); padding: 48px 0; border-top: 1px solid var(--border-color); }
-        .footer-container { 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-        .footer-social a { color: var(--secondary-text); margin: 0 12px; font-size: 1.25rem; transition: color 0.2s; }
-        .footer-social a:hover { color: var(--primary-text); }
-        
-        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in-section.visible { opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
@@ -323,10 +155,10 @@
         </div>
     </nav>
 
-    <header class="hero">
+    <header class="hero hero-sequential">
         <div class="container hero-content">
             <h1 class="animate-on-load">A Câmara Municipal do Futuro, Hoje.</h1>
-            <p class="animate-on-load">Uma plataforma completa e integrada para votações eletrônicas, gerenciamento de pautas, transmissão de sessões e transparência total para o cidadão.</p>
+            <p class="animate-on-load">Uma plataforma completa para modernizar...</p>
             <a href="#" class="btn btn-secondary btn-cta-animated animate-on-load">Descubra como Modernizar</a>
         </div>
     </header>
@@ -334,17 +166,18 @@
     <main>
         <section id="features" class="section">
             <div class="container">
-                <div class="section-header fade-in-section">
+                <div class="section-header fade-in">
                     <h2>Tudo que sua câmara precisa em um só lugar</h2>
-                    <p>Simplifique processos, economize recursos e aumente a transparência com nossas ferramentas desenvolvidas para o setor público.</p>
+                    <p>Gerencie sessões, votações e documentos com eficiência total</p>
                 </div>
+                
                 <div class="features-grid">
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-check-to-slot"></i><h3>Painel de Votação em Tempo Real</h3><p>Realize votações nominais e simbólicas com apuração instantânea e exibição em painéis públicos ou transmissões online.</p></div>
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-file-alt"></i><h3>Gestão Completa de Pautas</h3><p>Cadastre, edite e organize pautas, projetos de lei e requerimentos de forma 100% digital, eliminando o uso de papel.</p></div>
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-gavel"></i><h3>Ordem do Dia e Sessões</h3><p>Controle o tempo de fala dos oradores e organize a pauta do dia de forma intuitiva, otimizando o andamento das sessões.</p></div>
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-chart-pie"></i><h3>Relatórios e Análises</h3><p>Gere relatórios detalhados de votações, frequência e produtividade legislativa com apenas alguns cliques.</p></div>
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-users"></i><h3>Perfis Institucionais</h3><p>Mantenha perfis atualizados da Câmara e dos vereadores, centralizando informações para o público e a imprensa.</p></div>
-                    <div class="feature-card fade-in-section"><i class="fa-solid fa-shield-halved"></i><h3>Segurança e Confiabilidade</h3><p>Nossa plataforma utiliza as melhores práticas de segurança para garantir a integridade e a autenticidade de todos os dados.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-check-to-slot"></i><h3>Painel de Votação em Tempo Real</h3><p>Realize votações nominais e simbólicas com apuração instantânea e exibição em painéis públicos ou transmissões online.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-file-alt"></i><h3>Gestão Completa de Pautas</h3><p>Cadastre, edite e organize pautas, projetos de lei e requerimentos de forma 100% digital, eliminando o uso de papel.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-gavel"></i><h3>Ordem do Dia e Sessões</h3><p>Controle o tempo de fala dos oradores e organize a pauta do dia de forma intuitiva, otimizando o andamento das sessões.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-chart-pie"></i><h3>Relatórios e Análises</h3><p>Gere relatórios detalhados de votações, frequência e produtividade legislativa com apenas alguns cliques.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-users"></i><h3>Perfis Institucionais</h3><p>Mantenha perfis atualizados da Câmara e dos vereadores, centralizando informações para o público e a imprensa.</p></div>
+                    <div class="feature-card fade-in"><i class="fa-solid fa-shield-halved"></i><h3>Segurança e Confiabilidade</h3><p>Nossa plataforma utiliza as melhores práticas de segurança para garantir a integridade e a autenticidade de todos os dados.</p></div>
                 </div>
             </div>
         </section>
@@ -390,36 +223,10 @@
         </div>
     </footer>
 
+    <script src="../js/global.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const heroElements = document.querySelectorAll('.animate-on-load');
-            heroElements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.classList.add('visible');
-                }, (index + 1) * 200);
-            });
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-
-            const sections = document.querySelectorAll('.fade-in-section');
-            sections.forEach(section => observer.observe(section));
-
-            const navbar = document.querySelector('.navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
+            initUnifiedAnimations(); // Usar sistema unificado
         });
     </script>
 </body>

@@ -1,4 +1,20 @@
 /* forms.css */
+
+.password-group {
+    position: relative;
+}
+.password-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    color: var(--secondary-text);
+}
+
 .form-section {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -6,18 +22,26 @@
     padding: 32px;
     flex-grow: 1;
 }
+
 .form-group { margin-bottom: 24px; }
 .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--secondary-text); margin-bottom: 8px; }
-.form-input, .form-textarea, .form-select {
-    width: 100%;
-    background-color: var(--background-dark);
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    background-color: var(--hover-bg);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 10px 12px;
     color: var(--primary-text);
-    font-family: 'Inter', sans-serif;
+    padding: 10px 12px;
+    border-radius: 6px;
     font-size: 1rem;
+    width: 100%;
 }
+
+
 .form-input:focus, .form-textarea:focus, .form-select:focus {
     outline: none;
     border-color: var(--accent-blue);
@@ -50,3 +74,4 @@ input:checked + .slider { background-color: var(--accent-green); }
 input:checked + .slider:before { transform: translateX(20px); }
 .current-photo { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border-color); margin-bottom: 16px; }
 .file-input-wrapper .file-input-button { border-radius: 0; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-right: 1px solid var(--border-color); }
+

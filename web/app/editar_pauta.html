@@ -14,66 +14,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/forms.css">
 
     <style>
         /* ESTILOS ESPECÍFICOS DO FORMULÁRIO DE EDIÇÃO DE PAUTA */
-        .sidebar-header .logo-svg {
-            height: 32px;
-            width: auto;
-            flex-shrink: 0;
-        }
         
-        /* Formulário de Edição */
-        .form-section {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--secondary-text);
-        }
-
-        .form-group input[type="text"],
-        .form-group textarea,
-        .form-group select {
-            background-color: var(--hover-bg);
-            border: 1px solid var(--border-color);
-            color: var(--primary-text);
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 1rem;
-            width: 100%;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-group select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%238b949e" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 30px;
-        }
-
         .file-upload-group {
             display: flex;
             flex-direction: column;
@@ -86,6 +31,7 @@
             gap: 12px;
         }
 
+        
         .file-display .file-badge {
             background-color: var(--accent-blue);
             color: white;
@@ -186,10 +132,10 @@
                         <button class="btn-preview"><i class="fa-solid fa-eye"></i> Ver Preview</button>
                     </div>
                     <div class="file-input-wrapper">
-                        <label for="fileInput" class="custom-file-upload">
+                        <label for="file-input" class="custom-file-upload">
                             Escolher arquivo
                         </label>
-                        <input type="file" id="fileInput">
+                        <input type="file" id="file-input">
                         <span class="file-name">Nenhum arquivo escolhido</span>
                     </div>
                 </div>
@@ -203,6 +149,7 @@
     </div>
 
     <script src="../js/global.js"></script>
+    <script src="../js/forms.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -212,19 +159,6 @@
             icon: 'fa-file-lines',
             navActive: 'nav-cadastro'
             });
-            const fileInput = document.getElementById('fileInput');
-            const fileNameSpan = document.querySelector('.file-name');
-
-            if(fileInput) {
-                fileInput.addEventListener('change', (event) => {
-                    if (event.target.files.length > 0) {
-                        fileNameSpan.textContent = event.target.files[0].name;
-                    } else {
-                        fileNameSpan.textContent = 'Nenhum arquivo escolhido';
-                    }
-                });
-            }
-
         });
     </script>
 
