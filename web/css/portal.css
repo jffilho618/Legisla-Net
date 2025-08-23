@@ -133,6 +133,10 @@ body::after {
     align-items: center;
     text-align: center;
     overflow: hidden;
+    
+}
+/* Classe específica para a borda vermelha do Hero "Ao Vivo" */
+.hero-live-border {
     border-bottom: 3px solid var(--accent-red);
 }
 .hero::after {
