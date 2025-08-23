@@ -20,15 +20,16 @@ async function initLayout(pageConfig) {
     const path = window.location.pathname;
 
     // Determina o contexto (admin, app ou portal) com base no caminho do URL
+    // CORREÇÃO: Caminhos alterados para absolutos
     if (path.includes('/admin/')) {
-        await loadComponent('../components/admin_sidebar.html', 'sidebar-placeholder');
-        await loadComponent('../components/admin_header.html', 'header-placeholder');
+        await loadComponent('/components/admin_sidebar.html', 'sidebar-placeholder');
+        await loadComponent('/components/admin_header.html', 'header-placeholder');
     } else if (path.includes('/app/')) {
-        await loadComponent('../components/app_sidebar.html', 'sidebar-placeholder');
-        await loadComponent('../components/app_header.html', 'header-placeholder');
+        await loadComponent('/components/app_sidebar.html', 'sidebar-placeholder');
+        await loadComponent('/components/app_header.html', 'header-placeholder');
     } else if (path.includes('/portal/')) {
-        await loadComponent('../components/portal_navbar.html', 'navbar-placeholder');
-        await loadComponent('../components/portal_footer.html', 'footer-placeholder');
+        await loadComponent('/components/portal_navbar.html', 'navbar-placeholder');
+        await loadComponent('/components/portal_footer.html', 'footer-placeholder');
     }
 
     // Após carregar os componentes, configura os elementos dinâmicos
@@ -159,23 +160,22 @@ function navigateToPage(pageName) {
 }
 
 function getPageUrl(pageName) {
-    const relativePath = isAdminContext() ? '' : '../admin/';
-    
+    // CORREÇÃO: Caminhos alterados para absolutos
     const pageMap = {
         // Admin pages
-        'dashboard_admin': `${relativePath}dashboard_admin.html`,
-        'nova-camara': `${relativePath}nova_camara.html`,
+        'dashboard_admin': '/admin/dashboard_admin.html',
+        'nova-camara': '/admin/nova_camara.html',
         // App pages
-        'dashboard': '../app/dashboard.html',
-        'cadastro': '../app/cadastro_de_pautas.html',
-        'nova_pauta': '../app/nova_pauta.html',
-        'editar_pauta': '../app/editar_pauta.html',
-        'vereadores': '../app/vereadores.html',
-        'editar_vereador': '../app/editar_vereador.html',
-        'ordem_do_dia': '../app/ordem_do_dia.html',
-        'relatorio': '../app/relatorio.html',
-        'perfil': '../app/perfil_camara.html',
-        'sessoes': '../app/nova_sessao.html',
+        'dashboard': '/app/dashboard.html',
+        'cadastro': '/app/cadastro_de_pautas.html',
+        'nova_pauta': '/app/nova_pauta.html',
+        'editar_pauta': '/app/editar_pauta.html',
+        'vereadores': '/app/vereadores.html',
+        'editar_vereador': '/app/editar_vereador.html',
+        'ordem_do_dia': '/app/ordem_do_dia.html',
+        'relatorio': '/app/relatorio.html',
+        'perfil': '/app/perfil_camara.html',
+        'sessoes': '/app/nova_sessao.html',
     };
     
     // Adapta a chave de busca para o contexto admin
