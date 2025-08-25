@@ -13,9 +13,11 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
-    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/forms.css">
 
     <style>
+        /* Estilos específicos da página de login */
         body {
             display: flex;
             justify-content: center;
@@ -23,6 +25,7 @@
             min-height: 100vh;
             padding: 20px;
         }
+
 
         .login-container {
             width: 100%;
@@ -62,7 +65,6 @@
             color: var(--primary-text);
             text-decoration: none;
         }
-        /* Estilo para o novo logo SVG */
         .logo svg {
             height: 32px;
             width: auto;
@@ -80,51 +82,6 @@
             gap: 16px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .form-label a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-size: 0.8rem;
-        }
-
-        .form-label a:hover {
-            text-decoration: underline;
-        }
-
-        .form-input {
-            background-color: var(--background-dark);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: var(--primary-text);
-            font-size: 0.9rem;
-            width: 100%;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
-        }
-
-        .password-group {
-            position: relative;
-        }
-
         .password-toggle {
             position: absolute;
             right: 12px;
@@ -136,24 +93,26 @@
             cursor: pointer;
         }
 
-        .submit-btn {
-            background-color: var(--accent-green);
-            color: white;
-            border: 1px solid rgba(240, 246, 252, 0.1);
-            border-radius: 6px;
-            padding: 10px 16px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
+        /* CORREÇÃO: Ajusta a altura do botão para corresponder à dos inputs */
+        .login-form .btn {
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
-        .submit-btn:hover {
-            background-color: #2ea043;
+        /* CORREÇÃO: Estilos para o link "Esqueceu a senha" reposicionado */
+        .forgot-password-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+        .forgot-password-link a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .forgot-password-link a:hover {
+            text-decoration: underline;
         }
 
-        /* --- NOVOS ESTILOS PARA ANIMAÇÃO DE ENTRADA --- */
         .fade-in {
             opacity: 0;
             transform: translateY(10px);
@@ -166,7 +125,6 @@
                 transform: translateY(0);
             }
         }
-        /* Atrasos diferentes para cada elemento criar um efeito cascata */
         .logo { animation-delay: 0.1s; }
         .login-card { animation-delay: 0.2s; }
 
@@ -174,7 +132,7 @@
 </head>
 <body>
     <div class="login-container">
-        <a href="#" class="logo fade-in">
+        <a href="/" class="logo fade-in">
             <svg viewBox="0 0 44 40" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -192,15 +150,12 @@
             </div>
             <form id="login-form" class="login-form" onsubmit="return false;">
                 <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email">Email</label>
                     <input type="email" id="email" class="form-input" placeholder="Digite seu email" required>
                 </div>
-                <div c
-                lass="form-group">
-                    <div class="form-label">
-                        <label for="password">Senha</label>
-                        <a href="#">Esqueceu sua senha?</a>
-                    </div>
+                <div class="form-group">
+                    <!-- CORREÇÃO: Removido o link "Esqueceu a senha" daqui -->
+                    <label for="password">Senha</label>
                     <div class="password-group">
                         <input type="password" id="password" class="form-input" placeholder="Digite sua senha" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
@@ -208,51 +163,52 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="submit-btn">Entrar</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                <a href="#">Esqueceu sua senha?</a>
             </form>
+            
         </div>
     </div>
 
-    <script src="../js/forms.js"></script>
+    <script src="/js/forms.js"></script>
+    <script src="/js/global.js"></script>
 
-    <script>
-        const loginForm = document.getElementById('login-form');
+<script>
+    const loginForm = document.getElementById('login-form');
 
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            try {
-                // A MUDANÇA CRUCIAL ESTÁ AQUI: O URL completo da sua API
-                const response = await fetch('http://localhost:3000/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password }),
-                });
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
 
-                const result = await response.json();
+            const result = await response.json();
 
-                if (!response.ok) {
-                    alert(result.error);
-                    return;
-                }
-
-                // A lógica de redirecionamento continua a mesma
-                if (result.role === 'super_admin') {
-                    // O caminho é relativo à estrutura da pasta 'web'
-                    window.location.href = '../admin/dashboard_admin.html';
-                } else if (result.role === 'admin_camara') {
-                    window.location.href = './dashboard.html'; // Relativo à pasta 'app'
-                } else {
-                    alert('Tipo de usuário desconhecido.');
-                }
-
-            } catch (error) {
-                alert('Não foi possível conectar ao servidor da API.');
+            if (!response.ok) {
+                alert(result.error || 'Ocorreu um erro.');
+                return;
             }
-        });
-    </script>
+
+            // CORREÇÃO APLICADA AQUI: Acessando result.user.role
+            if (result.user && result.user.role === 'super_admin') {
+                window.location.href = '/admin/dashboard_admin.html';
+            } else if (result.user && result.user.role === 'admin_camara') {
+                window.location.href = '/app/dashboard.html';
+            } else {
+                alert('Tipo de usuário desconhecido ou resposta inválida da API.');
+            }
+
+        } catch (error) {
+            alert('Não foi possível conectar ao servidor.');
+        }
+    });
+</script>
 </body>
 </html>
