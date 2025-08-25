@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-
-// Certifique-se de que o caminho para o controller está correto
+const { body } = require('express-validator');
 const authController = require('../controllers/authController');
 
-// Define a rota de login
-router.post('/login', authController.handleLogin);
-
-// Podem ser adicionadas outras rotas aqui no futuro, como /register, /logout, etc.
+router.post(
+    '/login',
+    body('email', 'O email é inválido').isEmail(),
+    body('password', 'A senha não pode estar em branco').notEmpty(),
+    authController.handleLogin
+);
 
 module.exports = router;
